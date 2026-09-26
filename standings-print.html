@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tiger Pride Standings | Fort Hays Tech Northwest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── THEME ── */
+:root {
+  --bg: #fff;
+  --bg2: #f4f4f2;
+  --text: #111;
+  --text2: #555;
+  --text3: #999;
+  --border: #eee;
+  --bar-bg: #eee;
+}
+body.dark {
+  --bg: #111;
+  --bg2: #1a1a1a;
+  --text: #f5f5f5;
+  --text2: #999;
+  --text3: #555;
+  --border: #2a2a2a;
+  --bar-bg: #2b2b2b;
+}
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background .2s, color .2s;
+}
+
+.page { max-width: 800px; margin: 0 auto; padding: 2rem; }
+
+/* ── HEADER ── */
+.stripe { background: #8b0e04; height: 6px; border-radius: 3px; margin-bottom: 1.25rem; }
+.header { text-align: center; border-bottom: 4px solid #fbbe00; padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+.school { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #8b0e04; margin-bottom: 6px; }
+.title { font-family: 'Barlow Condensed', sans-serif; font-size: 2.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: var(--text); line-height: 1; }
+.title span { color: #fbbe00; }
+.subtitle { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--text2); margin-top: 8px; }
+.date-line { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--text3); margin-top: 4px; letter-spacing: .08em; text-transform: uppercase; }
+
+/* ── TABS ── */
+.filter-tabs { display: flex; gap: 6px; justify-content: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.ftab { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 5px 14px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; transition: all .15s; }
+.ftab:hover { color: var(--text); }
+.ftab.active { background: #fbbe00; color: #111; border-color: #fbbe00; }
+
+/* ── TABLE ── */
+table { width: 100%; border-collapse: collapse; }
+tr { border-bottom: 1px solid var(--border); }
+tr:last-child { border-bottom: none; }
+td { padding: 9px 8px; vertical-align: middle; }
+.rank { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; width: 38px; text-align: center; color: var(--text); }
+.name { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--text); }
+.bar-cell { width: 35%; padding: 9px 12px; }
+.bar-bg { background: var(--bar-bg); border-radius: 3px; height: 8px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
+.pts { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: #fbbe00; width: 52px; text-align: right; }
+.breakdown { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: var(--text3); width: 96px; text-align: right; letter-spacing: .04em; }
+
+/* ── FOOTER ── */
+.footer { text-align: center; margin-top: 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); border-top: 1px solid var(--border); padding-top: 1rem; }
+.footer span { color: #fbbe00; }
+
+/* ── CONTROLS ── */
+.controls { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; }
+.ctrl-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; cursor: pointer; border-radius: 6px; padding: 9px 22px; border: 1px solid var(--border); background: var(--bg2); color: var(--text); transition: all .15s; }
+.ctrl-btn:hover { opacity: .85; }
+.ctrl-btn.gold { background: #fbbe00; color: #111; border-color: #fbbe00; }
+
+/* ── LOADING ── */
+.loading { text-align: center; padding: 4rem 2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); }
+.spinner { width: 28px; height: 28px; border: 3px solid var(--bar-bg); border-top-color: #fbbe00; border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── PRINT ── */
+@media print {
+  .controls, .filter-tabs { display: none; }
+  body { padding: 0; }
+  .page { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="stripe"></div>
+  <div class="header">
+    <div class="school">Fort Hays Tech | Northwest &mdash; Goodland, KS</div>
+    <div class="title">🐯 Tiger Pride <span>Standings</span></div>
+    <div class="subtitle" id="subtitleEl">2026–2027 Season</div>
+    <div class="date-line" id="dateEl"></div>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="ftab active" onclick="setFilter('all', this)">All Events</button>
+    <button class="ftab" onclick="setFilter('intramural', this)">Intramural</button>
+    <button class="ftab" onclick="setFilter('student', this)">Student Life</button>
+    <button class="ftab" onclick="setFilter('athletic', this)">Athletic</button>
+  </div>
+
+  <div id="tableWrap">
+    <div class="loading">
+      <div class="spinner"></div>
+      Loading standings…
+    </div>
+  </div>
+
+  <div class="footer">fhnw.edu &nbsp;&middot;&nbsp; <span>Go Tigers!</span></div>
+
+  <div class="controls">
+    <button class="ctrl-btn" onclick="toggleTheme()">🌙 Dark Mode</button>
+    <button class="ctrl-btn gold" onclick="window.print()">🖨 Print / Save as PDF</button>
+  </div>
+</div>
+
+<script>
+var API    = "https://script.google.com/macros/s/AKfycbyYQMh2fCVIeGZGo35g6lSxcwUzzCa-qZopaZB8E2uX8f0HjzVLhTYFwQcT4k-5kM9x/exec";
+var SECRET = "49c6bedd35d62d28cdf75082b5727cd4da864816e527b173";
+
+var COLORS = ['#fbbe00','#e8a800','#d49200','#f0a030','#e88c20','#c97a4e','#b86840','#a05530','#8b0e04','#a41208','#c01510','#d42515','#e03520','#ff6b60','#ff8870','#c09050','#d4aa60','#e8c470'];
+
+var allData  = [];
+var programs = [];
+var currentFilter = 'all';
+
+function totalFor(totals, prog, tab) {
+  if (tab === 'all') return totals[prog].intramural + totals[prog].student + totals[prog].athletic;
+  return totals[prog][tab] || 0;
+}
+
+function computeStandings() {
+  var totals = {};
+  programs.forEach(function(p) { totals[p] = { intramural:0, student:0, athletic:0 }; });
+  allData.forEach(function(row) {
+    var p = row.Program;
+    var t = (row.EventType || '').toLowerCase();
+    var n = parseInt(row.Attendees) || 0;
+    if (totals[p] && totals[p][t] !== undefined) totals[p][t] += n;
+  });
+  return totals;
+}
+
+function renderTable() {
+  var totals = computeStandings();
+  var sorted = programs.slice().sort(function(a, b) {
+    return totalFor(totals, b, currentFilter) - totalFor(totals, a, currentFilter);
+  });
+  var maxPts = Math.max(1, totalFor(totals, sorted[0], currentFilter));
+
+  var tabLabel = currentFilter === 'all' ? 'All Events'
+    : currentFilter === 'intramural' ? 'Intramural'
+    : currentFilter === 'student' ? 'Student Life' : 'Athletic';
+
+  document.getElementById('subtitleEl').textContent = tabLabel + '  ·  2026–2027 Season';
+
+  var html = '<table><tbody>';
+  for (var i = 0; i < sorted.length; i++) {
+    var prog  = sorted[i];
+    var pts   = totalFor(totals, prog, currentFilter);
+    var pct   = Math.round((pts / maxPts) * 100);
+    var t     = totals[prog];
+    var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : String(i + 1);
+    var color = COLORS[programs.indexOf(prog) % COLORS.length];
+    html += '<tr>'
+      + '<td class="rank">' + medal + '</td>'
+      + '<td class="name">' + prog + '</td>'
+      + '<td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:' + pct + '%;background:' + color + ';"></div></div></td>'
+      + '<td class="pts">' + pts.toLocaleString() + '</td>'
+      + '<td class="breakdown">I:' + t.intramural + ' S:' + t.student + ' A:' + t.athletic + '</td>'
+      + '</tr>';
+  }
+  html += '</tbody></table>';
+  document.getElementById('tableWrap').innerHTML = html;
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.ftab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderTable();
+}
+
+function toggleTheme() {
+  var isDark = document.body.classList.toggle('dark');
+  document.querySelector('.ctrl-btn:first-child').textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+}
+
+async function loadData() {
+  try {
+    var res  = await fetch(API + '?action=getAll&_token=' + SECRET);
+    var json = await res.json();
+    allData  = json.data || [];
+    programs = (json.programs && json.programs.length) ? json.programs : [];
+
+    var now = new Date().toLocaleDateString('en-US', {
+      timeZone: 'America/Denver',
+      weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+    });
+    document.getElementById('dateEl').textContent = now;
+
+    renderTable();
+  } catch(e) {
+    document.getElementById('tableWrap').innerHTML = '<div class="loading" style="color:#e84545;">Could not load standings. Check connection.</div>';
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>

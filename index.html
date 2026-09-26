@@ -513,6 +513,7 @@ td.muted { color:var(--text2); font-size:12px; }
           <h2>Program Standings</h2>
           <div style="display:flex;align-items:center;gap:8px;">
             <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+            <button class="refresh-btn" onclick="window.open('standings-print.html','_blank')" style="color:var(--gold);border-color:rgba(251,190,0,0.4);">🖨 Export</button>
             <div class="tabs">
               <button class="tab active" onclick="setTab('all',this)">All</button>
               <button class="tab" onclick="setTab('intramural',this)">Intramural</button>
