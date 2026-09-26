@@ -1883,10 +1883,10 @@ function printStandings() {
     + '<table><tbody>' + rows + '</tbody></table>'
     + '<div class="footer">fhnw.edu &nbsp;&middot;&nbsp; <span class="gold">Go Tigers!</span></div>'
     + '<div class="controls">'
-    + '<button onclick="document.body.classList.toggle('dark')">Toggle Light / Dark</button>'
+    + '<button id="tgBtn" onclick="toggleDark()">Toggle Light / Dark</button>'
     + '<button class="gold" onclick="window.print()">Print / Save as PDF</button>'
     + '</div>'
-    + '</body></html>';
+    + '<script>function toggleDark(){document.body.classList.toggle("dark");}<\/script>'\n    + '</body></html>';
 
   var win = window.open('', '_blank');
   if(!win){ alert('Please allow popups for this site to use the Export feature.'); return; }
