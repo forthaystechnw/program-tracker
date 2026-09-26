@@ -86,8 +86,15 @@ td { padding: 9px 8px; vertical-align: middle; }
 /* ── PRINT ── */
 @media print {
   .controls, .filter-tabs { display: none; }
-  body { padding: 0; }
+  body { padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .page { padding: 1rem; }
+  body.dark { background: #111 !important; color: #f5f5f5 !important; }
+  body.dark td, body.dark .name, body.dark .rank { color: #f5f5f5 !important; }
+  body.dark tr { border-bottom-color: #2a2a2a !important; }
+  body.dark .bar-bg { background: #2b2b2b !important; }
+  body.dark .footer, body.dark .subtitle, body.dark .date-line { color: #999 !important; }
+  body.dark .header { border-bottom-color: #fbbe00 !important; }
+  body.dark .breakdown { color: #555 !important; }
 }
 </style>
 </head>
