@@ -999,11 +999,12 @@ async function doLogin(){
   btn.textContent = "Sign In";
 }
 function doLogout(){isAdmin=false;showPublic();}
-function showSection(id,btn){
+async function showSection(id,btn){
   document.querySelectorAll(".admin-section").forEach(s=>s.classList.remove("active"));
   document.querySelectorAll(".anav").forEach(b=>b.classList.remove("active"));
   document.getElementById("sec-"+id).classList.add("active");
   btn.classList.add("active");
+  if(id==="events"){ await syncEventsFromSheet(); renderEventsTable(); }
 }
 
 /* ══════════════════════════════════════════
