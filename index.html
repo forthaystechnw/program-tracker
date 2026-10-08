@@ -1375,7 +1375,6 @@ function renderEventsTable(){
 /* ── EVENT MODAL ── */
 async function openEventModal(id){
   editingEventId=id||null;
-  await syncEventsFromSheet();
   const ev=id?events.find(e=>e.id===id):null;
   document.getElementById("eventModalTitle").textContent=id?"Edit Event":"Create Event";
   document.getElementById("ev-name").value=ev?ev.name:"";
