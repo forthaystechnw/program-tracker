@@ -1416,12 +1416,18 @@ async function syncEventsFromSheet(){
     const fj=await fr.json();
     if(fj.events && fj.events.length){
       fj.events.forEach(fe=>{
-        const idx=events.findIndex(e=>e.id===fe.id);
+        // Auto-assign an id to events that were added in the sheet with no id.
+        // We patch the sheet immediately so future syncs find the same id.
+        if(!fe.id){
+          fe.id="evt_"+Date.now()+"_"+Math.random().toString(36).slice(2,7);
+          fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"updateEvent",event:fe})});
+        }
+        // Match by id; for blank-id events fall back to matching by name+type
+        let idx=fe.id?events.findIndex(e=>e.id===fe.id):-1;
+        if(idx<0 && fe.name) idx=events.findIndex(e=>!e.id&&e.name===fe.name&&e.type===fe.type);
         if(idx>=0){
-          // Update existing local entry with fresh sheet data
           Object.assign(events[idx],fe);
         } else {
-          // Add events from sheet that aren't in local array yet
           events.push(fe);
         }
       });
