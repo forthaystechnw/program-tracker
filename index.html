@@ -1375,6 +1375,9 @@ function renderEventsTable(){
 /* ── EVENT MODAL ── */
 async function openEventModal(id){
   editingEventId=id||null;
+  // Always pull fresh data from the sheet before populating edit fields,
+  // so events added directly in the spreadsheet always populate correctly.
+  if(id) await syncEventsFromSheet();
   const ev=id?events.find(e=>e.id===id):null;
   document.getElementById("eventModalTitle").textContent=id?"Edit Event":"Create Event";
   document.getElementById("ev-name").value=ev?ev.name:"";
@@ -1412,9 +1415,15 @@ async function syncEventsFromSheet(){
     const fr=await fetch(API+"?action=getAll&_token="+API_SECRET);
     const fj=await fr.json();
     if(fj.events && fj.events.length){
-      // Add any events from sheet not in local array
       fj.events.forEach(fe=>{
-        if(!events.find(e=>e.id===fe.id)) events.push(fe);
+        const idx=events.findIndex(e=>e.id===fe.id);
+        if(idx>=0){
+          // Update existing local entry with fresh sheet data
+          Object.assign(events[idx],fe);
+        } else {
+          // Add events from sheet that aren't in local array yet
+          events.push(fe);
+        }
       });
     }
   }catch(_){}
@@ -1450,7 +1459,14 @@ async function saveEvent(){
   }
 
   try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveEvents",events})});
+    if(editingEventId){
+      await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"updateEvent",event:{id:editingEventId,name,type,openDT,closeDT,statusOverride,desc,showUpcoming}})});
+    } else {
+      const lastEv=events[events.length-1];
+      const newId=lastEv.id||("evt_"+Date.now());
+      lastEv.id=newId;
+      await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"addEvent",event:{id:newId,name,type,openDT,closeDT,statusOverride,desc,showUpcoming}})});
+    }
     showAdminStatus("eventsStatus",editingEventId?`✓ Event updated.`:`✓ Event "${name}" created.`,"ok");
     renderEventsTable();renderEventDropdown();renderUpcomingEvents();
     closeEventModal();
@@ -1461,12 +1477,11 @@ async function saveEvent(){
 function editEvent(id){openEventModal(id);}
 
 async function forceStatus(id,newStatus){
-  await syncEventsFromSheet();
   const ev=events.find(e=>e.id===id);
   if(!ev) return;
   ev.statusOverride=newStatus;
   try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveEvents",events})});
+    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"updateEvent",event:{...ev}})});
     showAdminStatus("eventsStatus",`✓ "${ev.name}" is now ${newStatus}.`,"ok");
     renderEventsTable();renderEventDropdown();renderUpcomingEvents();
   }catch(e){showAdminStatus("eventsStatus","Failed to update.","err");}
@@ -1478,7 +1493,7 @@ async function deleteEvent(id){
   if(!ev||!confirm(`Delete event "${ev.name}"? This won't remove existing attendance entries.`))return;
   events=events.filter(e=>e.id!==id);
   try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveEvents",events})});
+    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"deleteEvent",id})});
     showAdminStatus("eventsStatus","✓ Event deleted.","ok");
     renderEventsTable();renderEventDropdown();renderUpcomingEvents();
   }catch(e){showAdminStatus("eventsStatus","Failed to delete.","err");}
