@@ -1372,8 +1372,9 @@ function renderEventsTable(){
 }
 
 /* ── EVENT MODAL ── */
-function openEventModal(id){
+async function openEventModal(id){
   editingEventId=id||null;
+  await syncEventsFromSheet();
   const ev=id?events.find(e=>e.id===id):null;
   document.getElementById("eventModalTitle").textContent=id?"Edit Event":"Create Event";
   document.getElementById("ev-name").value=ev?ev.name:"";
@@ -1406,6 +1407,19 @@ function openEventModal(id){
 }
 function closeEventModal(){document.getElementById("eventModal").classList.remove("open");}
 
+async function syncEventsFromSheet(){
+  try{
+    const fr=await fetch(API+"?action=getAll&_token="+API_SECRET);
+    const fj=await fr.json();
+    if(fj.events && fj.events.length){
+      // Add any events from sheet not in local array
+      fj.events.forEach(fe=>{
+        if(!events.find(e=>e.id===fe.id)) events.push(fe);
+      });
+    }
+  }catch(_){}
+}
+
 async function saveEvent(){
   const name=document.getElementById("ev-name").value.trim();
   const type=document.getElementById("ev-type").value;
@@ -1426,17 +1440,7 @@ async function saveEvent(){
   const btn=document.getElementById("evSubmitBtn");
   btn.disabled=true;btn.textContent="Saving…";
 
-  // Always pull fresh data from sheet first to avoid wiping events added directly in the spreadsheet
-  try {
-    const fr=await fetch(API+"?action=getAll&_token="+API_SECRET);
-    const fj=await fr.json();
-    if(fj.events && fj.events.length){
-      fj.events.forEach(fe=>{
-        if(!events.find(e=>e.id===fe.id)) events.push(fe);
-      });
-      if(!editingEventId) events=events.filter(e=>fj.events.some(fe=>fe.id===e.id)||!e.id);
-    }
-  } catch(_){}
+  await syncEventsFromSheet();
 
   if(editingEventId){
     const ev=events.find(e=>e.id===editingEventId);
@@ -1457,7 +1461,9 @@ async function saveEvent(){
 function editEvent(id){openEventModal(id);}
 
 async function forceStatus(id,newStatus){
+  await syncEventsFromSheet();
   const ev=events.find(e=>e.id===id);
+  if(!ev) return;
   ev.statusOverride=newStatus;
   try{
     await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveEvents",events})});
@@ -1467,8 +1473,9 @@ async function forceStatus(id,newStatus){
 }
 
 async function deleteEvent(id){
+  await syncEventsFromSheet();
   const ev=events.find(e=>e.id===id);
-  if(!confirm(`Delete event "${ev.name}"? This won't remove existing attendance entries.`))return;
+  if(!ev||!confirm(`Delete event "${ev.name}"? This won't remove existing attendance entries.`))return;
   events=events.filter(e=>e.id!==id);
   try{
     await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveEvents",events})});
