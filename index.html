@@ -1159,7 +1159,12 @@ function renderLeaderboard(){
   const sorted=[...programs].sort((a,b)=>totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab));
   const maxPts=Math.max(1,totalFor(totals,sorted[0],currentTab));
   const lb=document.getElementById("leaderboard");
-  if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);prevRanks={};return;}
+  if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);prevRanks={};try{sessionStorage.removeItem("tplPrevRanks");}catch(_){}return;}
+
+  // Load previous ranks from sessionStorage if in-memory prevRanks is empty (e.g. after page reload)
+  if(Object.keys(prevRanks).length===0){
+    try{const s=sessionStorage.getItem("tplPrevRanks");if(s)prevRanks=JSON.parse(s);}catch(_){}
+  }
 
   // Build current rank map, then compare to previous snapshot
   const currRanks={};
@@ -1177,9 +1182,9 @@ function renderLeaderboard(){
     let arrow="";
     if(prevRanks[prog]!==undefined){
       const diff=prevRanks[prog]-currRanks[prog]; // positive = moved up
-      if(diff>0)      arrow=`<span style="color:#2ECC8A;font-size:11px;font-weight:800;margin-left:4px;" title="Up ${diff}">▲${diff}</span>`;
-      else if(diff<0) arrow=`<span style="color:#e84545;font-size:11px;font-weight:800;margin-left:4px;" title="Down ${Math.abs(diff)}">▼${Math.abs(diff)}</span>`;
-      else            arrow=`<span style="color:var(--text3);font-size:11px;margin-left:4px;">—</span>`;
+      if(diff>0)      arrow=`<span style="color:#2ECC8A;font-size:12px;font-weight:800;margin-left:6px;">▲${diff}</span>`;
+      else if(diff<0) arrow=`<span style="color:#e84545;font-size:12px;font-weight:800;margin-left:6px;">▼${Math.abs(diff)}</span>`;
+      else            arrow=`<span style="color:#888;font-size:12px;margin-left:6px;">—</span>`;
     }
 
     return `<div class="prog-row ${rowCls}">
@@ -1193,8 +1198,9 @@ function renderLeaderboard(){
     </div>`;
   }).join("");
 
-  // Save current ranks as the new snapshot for next render
+  // Save snapshot to both memory and sessionStorage so it survives tab switches
   prevRanks=currRanks;
+  try{sessionStorage.setItem("tplPrevRanks",JSON.stringify(currRanks));}catch(_){}
   updateStats(totals,sorted);
 }
 function updateStats(totals,sorted){
