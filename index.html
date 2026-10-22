@@ -828,6 +828,7 @@ let events   = [];
 let programs = [...DEFAULT_PROGRAMS];
 let currentTab = "all";
 let isAdmin    = false;
+let prevRanks  = {}; // rank snapshot before last render, keyed by program name
 let editingEventId = null;
 
 /* ══════════════════════════════════════════
@@ -1158,7 +1159,12 @@ function renderLeaderboard(){
   const sorted=[...programs].sort((a,b)=>totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab));
   const maxPts=Math.max(1,totalFor(totals,sorted[0],currentTab));
   const lb=document.getElementById("leaderboard");
-  if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);return;}
+  if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);prevRanks={};return;}
+
+  // Build current rank map, then compare to previous snapshot
+  const currRanks={};
+  sorted.forEach((prog,i)=>currRanks[prog]=i+1);
+
   lb.innerHTML=sorted.map((prog,i)=>{
     const pts=totalFor(totals,prog,currentTab),pct=Math.round((pts/maxPts)*100);
     const color=PROG_COLORS[programs.indexOf(prog)%PROG_COLORS.length];
@@ -1166,16 +1172,29 @@ function renderLeaderboard(){
     const rowCls=i===0?"top1":i===1?"top2":i===2?"top3":"";
     const rankTxt=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
     const t=totals[prog];
+
+    // Arrow indicator
+    let arrow="";
+    if(prevRanks[prog]!==undefined){
+      const diff=prevRanks[prog]-currRanks[prog]; // positive = moved up
+      if(diff>0)      arrow=`<span style="color:#2ECC8A;font-size:11px;font-weight:800;margin-left:4px;" title="Up ${diff}">▲${diff}</span>`;
+      else if(diff<0) arrow=`<span style="color:#e84545;font-size:11px;font-weight:800;margin-left:4px;" title="Down ${Math.abs(diff)}">▼${Math.abs(diff)}</span>`;
+      else            arrow=`<span style="color:var(--text3);font-size:11px;margin-left:4px;">—</span>`;
+    }
+
     return `<div class="prog-row ${rowCls}">
       <span class="rank ${rankCls}">${rankTxt}</span>
       <div class="prog-info">
-        <div class="prog-name">${prog}</div>
+        <div class="prog-name">${prog}${arrow}</div>
         <div class="prog-breakdown">I: ${t.intramural} &nbsp;·&nbsp; S: ${t.student} &nbsp;·&nbsp; A: ${t.athletic}</div>
       </div>
       <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
       <span class="pts-col">${pts.toLocaleString()}</span>
     </div>`;
   }).join("");
+
+  // Save current ranks as the new snapshot for next render
+  prevRanks=currRanks;
   updateStats(totals,sorted);
 }
 function updateStats(totals,sorted){
