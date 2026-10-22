@@ -828,7 +828,7 @@ let events   = [];
 let programs = [...DEFAULT_PROGRAMS];
 let currentTab = "all";
 let isAdmin    = false;
-let prevRanks  = {}; // rank snapshot before last render, keyed by program name
+let prevRanks  = {}; // rank snapshot for arrow display, keyed by tab then program name
 let editingEventId = null;
 
 /* ══════════════════════════════════════════
@@ -1159,14 +1159,13 @@ function renderLeaderboard(){
   const sorted=[...programs].sort((a,b)=>totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab));
   const maxPts=Math.max(1,totalFor(totals,sorted[0],currentTab));
   const lb=document.getElementById("leaderboard");
-  if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);prevRanks={};try{sessionStorage.removeItem("tplPrevRanks");}catch(_){}return;}
+  if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);return;}
 
-  // Load previous ranks from sessionStorage if in-memory prevRanks is empty (e.g. after page reload)
-  if(Object.keys(prevRanks).length===0){
-    try{const s=sessionStorage.getItem("tplPrevRanks");if(s)prevRanks=JSON.parse(s);}catch(_){}
-  }
+  // Load snapshot from localStorage (saved when an event closes) — keyed by tab
+  let snapRanks={};
+  try{const s=localStorage.getItem("tplRankSnap");if(s){const all=JSON.parse(s);snapRanks=all[currentTab]||{};}}catch(_){}
 
-  // Build current rank map, then compare to previous snapshot
+  // Build current rank map, then compare to snapshot
   const currRanks={};
   sorted.forEach((prog,i)=>currRanks[prog]=i+1);
 
@@ -1178,10 +1177,10 @@ function renderLeaderboard(){
     const rankTxt=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
     const t=totals[prog];
 
-    // Arrow indicator
+    // Arrow indicator — compare current rank to snapshot taken when last event closed
     let arrow="";
-    if(prevRanks[prog]!==undefined){
-      const diff=prevRanks[prog]-currRanks[prog]; // positive = moved up
+    if(snapRanks[prog]!==undefined){
+      const diff=snapRanks[prog]-currRanks[prog]; // positive = moved up
       if(diff>0)      arrow=`<span style="color:#2ECC8A;font-size:12px;font-weight:800;margin-left:6px;">▲${diff}</span>`;
       else if(diff<0) arrow=`<span style="color:#e84545;font-size:12px;font-weight:800;margin-left:6px;">▼${Math.abs(diff)}</span>`;
       else            arrow=`<span style="color:#888;font-size:12px;margin-left:6px;">—</span>`;
@@ -1198,9 +1197,6 @@ function renderLeaderboard(){
     </div>`;
   }).join("");
 
-  // Save snapshot to both memory and sessionStorage so it survives tab switches
-  prevRanks=currRanks;
-  try{sessionStorage.setItem("tplPrevRanks",JSON.stringify(currRanks));}catch(_){}
   updateStats(totals,sorted);
 }
 function updateStats(totals,sorted){
@@ -1500,6 +1496,7 @@ async function saveEvent(){
       await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"addEvent",event:{id:newId,name,type,openDT,closeDT,statusOverride,desc,showUpcoming}})});
     }
     showAdminStatus("eventsStatus",editingEventId?`✓ Event updated.`:`✓ Event "${name}" created.`,"ok");
+    if(statusOverride==="closed") saveStandingsSnapshot();
     renderEventsTable();renderEventDropdown();renderUpcomingEvents();
     closeEventModal();
   }catch(e){showModalStatus(st,"Failed to save.","err");}
@@ -1508,6 +1505,22 @@ async function saveEvent(){
 
 function editEvent(id){openEventModal(id);}
 
+// Save a standings snapshot for all tabs to localStorage so rank-change arrows
+// reflect movement since the last event closed, on any device.
+function saveStandingsSnapshot(){
+  try{
+    const totals=computeStandings();
+    const snap={};
+    ["all","intramural","student","athletic"].forEach(tab=>{
+      const sorted=[...programs].sort((a,b)=>totalFor(totals,b,tab)-totalFor(totals,a,tab));
+      snap[tab]={};
+      sorted.forEach((prog,i)=>snap[tab][prog]=i+1);
+    });
+    localStorage.setItem("tplRankSnap",JSON.stringify(snap));
+    localStorage.setItem("tplRankSnapTime",Date.now().toString());
+  }catch(_){}
+}
+
 async function forceStatus(id,newStatus){
   const ev=events.find(e=>e.id===id);
   if(!ev) return;
@@ -1515,6 +1528,8 @@ async function forceStatus(id,newStatus){
   try{
     await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"updateEvent",event:{...ev}})});
     showAdminStatus("eventsStatus",`✓ "${ev.name}" is now ${newStatus}.`,"ok");
+    // Snapshot standings when an event is closed so arrows update for all viewers
+    if(newStatus==="closed") saveStandingsSnapshot();
     renderEventsTable();renderEventDropdown();renderUpcomingEvents();
   }catch(e){showAdminStatus("eventsStatus","Failed to update.","err");}
 }
