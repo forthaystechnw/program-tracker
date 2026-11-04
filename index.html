@@ -8,11 +8,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<style>.material-symbols-rounded{font-family:'Material Symbols Rounded';font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;line-height:1;display:inline-block;white-space:nowrap;}</style>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --gold:#fbbe00; --gold-dim:rgba(251,190,0,0.12); --gold-dim2:rgba(251,190,0,0.22);
   --crimson:#8b0e04; --crimson-light:rgba(139,14,4,0.18);
+  --font-display:'Barlow Condensed',sans-serif; --font-body:'Barlow',sans-serif;
   --bg:#111; --bg2:#1a1a1a; --bg3:#222; --bg4:#2b2b2b;
   --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
   --text:#f5f5f5; --text2:#999; --text3:#555;
@@ -42,7 +45,7 @@ body.light .edit-row { background:var(--bg3); }
 body.light .feed-list::-webkit-scrollbar-thumb { background:var(--bg4); }
 body.light .panel-header { background:var(--bg3); }
 html,body { max-width:100%; overflow-x:hidden; }
-body { font-family:'Barlow',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; line-height:1.5; }
+body { font-family:var(--font-body); background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; line-height:1.5; }
 
 /* HEADER */
 .header { background:#0d0d0d; border-bottom:3px solid var(--gold); }
@@ -50,8 +53,8 @@ body { font-family:'Barlow',sans-serif; background:var(--bg); color:var(--text);
 .header-inner { max-width:1120px; margin:0 auto; padding:1.25rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
 .logo-area { display:flex; align-items:center; gap:16px; }
 .paw { font-size:2.6rem; line-height:1; filter:drop-shadow(0 0 12px rgba(251,190,0,0.4)); cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; }
-.school-name { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
-.tracker-name { font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:#f5f5f5; line-height:1; min-width:0; }
+.school-name { font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
+.tracker-name { font-family:var(--font-display); font-size:2rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:#f5f5f5; line-height:1; min-width:0; }
 .tracker-name span { color:var(--gold); }
 .header-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
 .legend { display:flex; gap:12px; flex-wrap:wrap; }
@@ -195,7 +198,7 @@ body { font-family:'Barlow',sans-serif; background:var(--bg); color:var(--text);
 .prog-row.top1 { border-left-color:var(--gold); background:rgba(251,190,0,0.04); }
 .prog-row.top2 { border-left-color:#b0b0b0; }
 .prog-row.top3 { border-left-color:#c97a4e; }
-.rank { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:800; min-width:28px; text-align:center; }
+.rank { font-family:var(--font-display); font-size:13px; font-weight:800; min-width:28px; text-align:center; }
 .rank.r1 { color:var(--gold); font-size:18px; } .rank.r2 { color:#c0c0c0; font-size:16px; } .rank.r3 { color:#c97a4e; font-size:16px; } .rank.rn { color:var(--text3); font-size:12px; }
 .prog-info { flex:1; min-width:0; }
 .prog-name { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -375,6 +378,12 @@ td.muted { color:var(--text2); font-size:12px; }
 .add-row input { flex:1; }
 
 /* STATUS */
+.icon-slot { background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .15s; }
+.icon-slot:hover { border-color:var(--gold); }
+.icon-grid { display:flex;flex-wrap:wrap;gap:6px; }
+.icon-btn { background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px;transition:all .15s;color:var(--text); }
+.icon-btn:hover { border-color:var(--gold);background:var(--gold-dim); }
+.icon-btn span.lbl { font-size:9px;color:var(--text3);text-align:center;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
 .status-msg { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; padding:6px 12px; border-radius:var(--radius); margin-bottom:10px; display:none; line-height:1.4; }
 .status-msg.ok  { background:rgba(46,204,138,0.12); border:1px solid rgba(46,204,138,0.3); color:#5ADBA4; display:block; }
 .status-msg.err { background:rgba(232,69,69,0.12);  border:1px solid rgba(232,69,69,0.3);  color:#f07070; display:block; }
@@ -673,8 +682,17 @@ td.muted { color:var(--text2); font-size:12px; }
 
                 <div class="form-group" style="margin:0;">
                   <label>Logo / Icon</label>
-                  <input type="text" id="branding-logo" placeholder="🐯" style="font-size:1.4rem;text-align:center;" maxlength="4" />
-                  <span style="font-size:11px;color:var(--text3);">Emoji or short text</span>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div id="branding-logo-preview" style="width:52px;height:52px;border-radius:8px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;flex-shrink:0;background:var(--bg2);">🐯</div>
+                    <div style="flex:1;">
+                      <label class="btn btn-ghost" style="cursor:pointer;display:inline-block;padding:6px 14px;font-size:12px;margin:0;">
+                        Upload Image
+                        <input type="file" id="branding-logo-file" accept="image/*" style="display:none;" onchange="handleLogoUpload(this)" />
+                      </label>
+                      <div style="font-size:11px;color:var(--text3);margin-top:4px;">PNG, JPG, SVG — any size</div>
+                      <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px;margin-top:4px;" onclick="clearLogo()">Use Emoji Instead</button>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="form-group" style="margin:0;">
@@ -686,6 +704,64 @@ td.muted { color:var(--text2); font-size:12px; }
                   <label>Leaderboard Title <span style="font-weight:400;color:var(--text3);">(big text)</span></label>
                   <input type="text" id="branding-title" placeholder="Tiger Pride" />
                   <span style="font-size:11px;color:var(--text3);">The word after this stays as "Leaderboard"</span>
+                </div>
+
+                <div class="form-group" style="margin:0;">
+                  <label>Header Font <span style="font-weight:400;color:var(--text3);">(titles &amp; ranks)</span></label>
+                  <input type="text" id="branding-font-display" placeholder="Barlow Condensed" />
+                  <span style="font-size:11px;color:var(--text3);">Any <a href="https://fonts.google.com" target="_blank" style="color:var(--gold);">Google Font</a> name, e.g. Oswald, Bebas Neue, Anton</span>
+                </div>
+
+                <div class="form-group" style="margin:0;">
+                  <label>Body Font <span style="font-weight:400;color:var(--text3);">(labels &amp; text)</span></label>
+                  <input type="text" id="branding-font-body" placeholder="Barlow" />
+                  <span style="font-size:11px;color:var(--text3);">Any <a href="https://fonts.google.com" target="_blank" style="color:var(--gold);">Google Font</a> name, e.g. Inter, Roboto, Lato</span>
+                </div>
+
+                <!-- Event type icons -->
+                <div class="form-group" style="margin:0;grid-column:1/-1;">
+                  <label>Event Type Icons</label>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:8px;">
+                    <div id="icon-slot-intramural" class="icon-slot" onclick="openIconPicker('intramural')">
+                      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Intramural</div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span id="icon-preview-intramural" style="font-size:1.8rem;line-height:1;">⚽</span>
+                        <span style="font-size:12px;color:var(--text2);" id="icon-label-intramural">Soccer Ball</span>
+                        <span style="margin-left:auto;font-size:11px;color:var(--gold);">Change ▸</span>
+                      </div>
+                    </div>
+                    <div id="icon-slot-student" class="icon-slot" onclick="openIconPicker('student')">
+                      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Student Life</div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span id="icon-preview-student" style="font-size:1.8rem;line-height:1;">🎉</span>
+                        <span style="font-size:12px;color:var(--text2);" id="icon-label-student">Party Popper</span>
+                        <span style="margin-left:auto;font-size:11px;color:var(--gold);">Change ▸</span>
+                      </div>
+                    </div>
+                    <div id="icon-slot-athletic" class="icon-slot" onclick="openIconPicker('athletic')">
+                      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Athletic</div>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span id="icon-preview-athletic" style="font-size:1.8rem;line-height:1;">🏟</span>
+                        <span style="font-size:12px;color:var(--text2);" id="icon-label-athletic">Stadium</span>
+                        <span style="margin-left:auto;font-size:11px;color:var(--gold);">Change ▸</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Icon picker modal -->
+                <div id="iconPickerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
+                  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:20px;width:min(520px,95vw);max-height:80vh;display:flex;flex-direction:column;gap:12px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                      <h4 style="margin:0;" id="iconPickerTitle">Choose Icon — Intramural</h4>
+                      <button onclick="closeIconPicker()" style="background:none;border:none;color:var(--text2);font-size:1.4rem;cursor:pointer;line-height:1;">✕</button>
+                    </div>
+                    <input type="text" id="iconSearchInput" placeholder="Search icons… (e.g. trophy, ball, star)" oninput="filterIcons()" style="width:100%;" />
+                    <div style="overflow-y:auto;flex:1;">
+                      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em;">Sports &amp; Activities</div>
+                      <div class="icon-grid" id="iconGrid"></div>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="form-group" style="margin:0;">
@@ -1309,7 +1385,8 @@ function renderUpcomingEvents(){
       if(ev.openDT) return fmtDT(ev.openDT);
       return "";
     })();
-    const typeLabel = typeRaw==="intramural"?"⚽ Intramural":typeRaw==="athletic"?"🏟 Athletic":"🎉 Student Life";
+    const _icons=getIcons();
+    const typeLabel = typeRaw==="intramural"?renderIcon(_icons.intramural)+" Intramural":typeRaw==="athletic"?renderIcon(_icons.athletic)+" Athletic":renderIcon(_icons.student)+" Student Life";
     return `<div class="upcoming-card ${type}">
       <div class="uc-type">${typeLabel}</div>
       ${statusChip}
@@ -1785,19 +1862,40 @@ function saveSeason(){
 
 /* ── BRANDING ── */
 const BRANDING_KEY="tplBranding";
-const BRANDING_DEFAULTS={logo:"🐯",school:"Fort Hays Tech | Northwest — Goodland, KS",title:"Tiger Pride",gold:"#fbbe00",crimson:"#8b0e04"};
+const BRANDING_DEFAULTS={logo:"🐯",logoIsImage:false,school:"Fort Hays Tech | Northwest — Goodland, KS",title:"Tiger Pride",gold:"#fbbe00",crimson:"#8b0e04",fontDisplay:"Barlow Condensed",fontBody:"Barlow",iconIntramural:"⚽",iconStudent:"🎉",iconAthletic:"🏟"};
 
 function applyBranding(){
   let b=BRANDING_DEFAULTS;
   try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},BRANDING_DEFAULTS,JSON.parse(s));}catch(_){}
+  // Load Google Fonts if changed from defaults
+  loadGoogleFont(b.fontDisplay||BRANDING_DEFAULTS.fontDisplay);
+  loadGoogleFont(b.fontBody||BRANDING_DEFAULTS.fontBody);
+  // Apply font CSS vars
+  document.documentElement.style.setProperty("--font-display",(b.fontDisplay||BRANDING_DEFAULTS.fontDisplay)+", 'Barlow Condensed', sans-serif");
+  document.documentElement.style.setProperty("--font-body",(b.fontBody||BRANDING_DEFAULTS.fontBody)+", 'Barlow', sans-serif");
   // Apply CSS vars
   document.documentElement.style.setProperty("--gold",b.gold);
   document.documentElement.style.setProperty("--crimson",b.crimson);
   document.documentElement.style.setProperty("--gold-dim",hexAlpha(b.gold,0.12));
   document.documentElement.style.setProperty("--gold-dim2",hexAlpha(b.gold,0.22));
   document.documentElement.style.setProperty("--crimson-light",hexAlpha(b.crimson,0.18));
-  // Apply text
-  document.querySelectorAll(".paw").forEach(el=>el.textContent=b.logo);
+  // Apply logo
+  document.querySelectorAll(".paw").forEach(el=>{
+    if(b.logoIsImage && b.logo){
+      el.innerHTML=`<img src="${b.logo}" style="width:100%;height:100%;object-fit:contain;border-radius:4px;" />`;
+    } else {
+      el.textContent=b.logo||"🐯";
+    }
+  });
+  // Update preview in admin panel
+  const prev=document.getElementById("branding-logo-preview");
+  if(prev){
+    if(b.logoIsImage && b.logo){
+      prev.innerHTML=`<img src="${b.logo}" style="width:100%;height:100%;object-fit:contain;" />`;
+    } else {
+      prev.textContent=b.logo||"🐯";
+    }
+  }
   document.querySelectorAll(".school-name").forEach(el=>el.textContent=b.school);
   document.querySelectorAll(".tracker-name").forEach(el=>{
     // keep the second word (Leaderboard / Admin / Login) in the <span>
@@ -1805,8 +1903,17 @@ function applyBranding(){
     const second=span?span.textContent:"";
     el.innerHTML=b.title+(second?` <span>${second}</span>`:"");
   });
-  // Populate admin form fields if they exist
-  const lEl=document.getElementById("branding-logo");     if(lEl)lEl.value=b.logo;
+  // Icon slot previews & labels
+  ["intramural","student","athletic"].forEach(function(which){
+    const key="icon"+which.charAt(0).toUpperCase()+which.slice(1);
+    const val=b[key]||BRANDING_DEFAULTS[key];
+    const prev=document.getElementById("icon-preview-"+which);
+    if(prev)prev.innerHTML=renderIcon(val);
+    const lbl=document.getElementById("icon-label-"+which);
+    if(lbl){const match=ICON_LIST.find(function(i){return i.v===val;});lbl.textContent=match?match.l:val;}
+  });
+  const fdEl=document.getElementById("branding-font-display"); if(fdEl)fdEl.value=(b.fontDisplay===BRANDING_DEFAULTS.fontDisplay?"":b.fontDisplay)||"";
+  const fbEl=document.getElementById("branding-font-body");    if(fbEl)fbEl.value=(b.fontBody===BRANDING_DEFAULTS.fontBody?"":b.fontBody)||"";
   const sEl=document.getElementById("branding-school");   if(sEl)sEl.value=b.school;
   const tEl=document.getElementById("branding-title");    if(tEl)tEl.value=b.title;
   const gEl=document.getElementById("branding-gold");     if(gEl)gEl.value=b.gold;
@@ -1816,16 +1923,52 @@ function applyBranding(){
 }
 
 function saveBranding(){
+  let existing={...BRANDING_DEFAULTS};
+  try{const s=localStorage.getItem(BRANDING_KEY);if(s)existing=Object.assign({},existing,JSON.parse(s));}catch(_){}
   const b={
-    logo:   (document.getElementById("branding-logo").value.trim()||BRANDING_DEFAULTS.logo),
-    school: (document.getElementById("branding-school").value.trim()||BRANDING_DEFAULTS.school),
-    title:  (document.getElementById("branding-title").value.trim()||BRANDING_DEFAULTS.title),
-    gold:   (document.getElementById("branding-gold").value||BRANDING_DEFAULTS.gold),
-    crimson:(document.getElementById("branding-crimson").value||BRANDING_DEFAULTS.crimson)
+    logo:        existing.logo,
+    logoIsImage: existing.logoIsImage||false,
+    school:      (document.getElementById("branding-school").value.trim()||BRANDING_DEFAULTS.school),
+    title:       (document.getElementById("branding-title").value.trim()||BRANDING_DEFAULTS.title),
+    fontDisplay:     (document.getElementById("branding-font-display").value.trim()||BRANDING_DEFAULTS.fontDisplay),
+    fontBody:        (document.getElementById("branding-font-body").value.trim()||BRANDING_DEFAULTS.fontBody),
+    iconIntramural:  existing.iconIntramural||BRANDING_DEFAULTS.iconIntramural,
+    iconStudent:     existing.iconStudent||BRANDING_DEFAULTS.iconStudent,
+    iconAthletic:    existing.iconAthletic||BRANDING_DEFAULTS.iconAthletic,
+    gold:        (document.getElementById("branding-gold").value||BRANDING_DEFAULTS.gold),
+    crimson:     (document.getElementById("branding-crimson").value||BRANDING_DEFAULTS.crimson)
   };
   try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
   applyBranding();
   showAdminStatus("brandingStatus","✓ Appearance saved.","ok");
+}
+
+function handleLogoUpload(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const dataUrl=e.target.result;
+    // Save immediately to localStorage
+    let b={...BRANDING_DEFAULTS};
+    try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
+    b.logo=dataUrl;
+    b.logoIsImage=true;
+    try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
+    applyBranding();
+    showAdminStatus("brandingStatus","✓ Logo uploaded.","ok");
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearLogo(){
+  let b={...BRANDING_DEFAULTS};
+  try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
+  b.logo="🐯";
+  b.logoIsImage=false;
+  try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
+  applyBranding();
+  showAdminStatus("brandingStatus","✓ Reset to emoji.","ok");
 }
 
 function resetBranding(){
@@ -1846,6 +1989,135 @@ document.addEventListener("input",function(e){
   if(e.target.id==="branding-gold")    document.getElementById("branding-gold-hex").value=e.target.value;
   if(e.target.id==="branding-crimson") document.getElementById("branding-crimson-hex").value=e.target.value;
 });
+
+/* ── ICON PICKER ── */
+const ICON_LIST=[
+  // Sports
+  {v:"sports_soccer",l:"Soccer"},{v:"sports_basketball",l:"Basketball"},{v:"sports_football",l:"Football"},
+  {v:"sports_baseball",l:"Baseball"},{v:"sports_volleyball",l:"Volleyball"},{v:"sports_tennis",l:"Tennis"},
+  {v:"sports_golf",l:"Golf"},{v:"sports_hockey",l:"Hockey"},{v:"sports_rugby",l:"Rugby"},
+  {v:"sports_cricket",l:"Cricket"},{v:"sports_kabaddi",l:"Kabaddi"},{v:"sports_mma",l:"MMA"},
+  {v:"sports_motorsports",l:"Motorsports"},{v:"sports_esports",l:"Esports"},{v:"sports_gymnastics",l:"Gymnastics"},
+  {v:"sports_handball",l:"Handball"},{v:"sports_martial_arts",l:"Martial Arts"},
+  // Fitness & Activity
+  {v:"fitness_center",l:"Gym"},{v:"directions_run",l:"Running"},{v:"directions_bike",l:"Biking"},
+  {v:"pool",l:"Swimming"},{v:"hiking",l:"Hiking"},{v:"rowing",l:"Rowing"},
+  {v:"self_improvement",l:"Yoga"},{v:"skateboarding",l:"Skateboarding"},{v:"surfing",l:"Surfing"},
+  {v:"sledding",l:"Sledding"},{v:"snowboarding",l:"Snowboarding"},{v:"downhill_skiing",l:"Skiing"},
+  // Awards & Events
+  {v:"emoji_events",l:"Trophy"},{v:"military_tech",l:"Medal"},{v:"workspace_premium",l:"Premium"},
+  {v:"star",l:"Star"},{v:"grade",l:"Star Badge"},{v:"local_activity",l:"Ticket"},
+  {v:"celebration",l:"Celebration"},{v:"festival",l:"Festival"},{v:"event",l:"Event"},
+  {v:"stadium",l:"Stadium"},{v:"scoreboard",l:"Scoreboard"},{v:"leaderboard",l:"Leaderboard"},
+  // School & Community
+  {v:"school",l:"School"},{v:"groups",l:"Groups"},{v:"people",l:"People"},
+  {v:"diversity_3",l:"Diversity"},{v:"volunteer_activism",l:"Volunteer"},{v:"handshake",l:"Handshake"},
+  {v:"campaign",l:"Campaign"},{v:"record_voice_over",l:"Speaker"},{v:"music_note",l:"Music"},
+  {v:"theater_comedy",l:"Theater"},{v:"palette",l:"Art"},{v:"science",l:"Science"},
+  {v:"biotech",l:"Lab"},{v:"computer",l:"Tech"},{v:"agriculture",l:"Agriculture"},
+  {v:"construction",l:"Construction"},{v:"engineering",l:"Engineering"},{v:"health_and_safety",l:"Health"},
+  {v:"local_hospital",l:"Medical"},{v:"pets",l:"Pets"},{v:"nature",l:"Nature"},
+  // Emojis
+  {v:"⚽",l:"Soccer Ball",emoji:true},{v:"🏀",l:"Basketball",emoji:true},{v:"🏈",l:"Football",emoji:true},
+  {v:"⚾",l:"Baseball",emoji:true},{v:"🎾",l:"Tennis",emoji:true},{v:"🏐",l:"Volleyball",emoji:true},
+  {v:"🏒",l:"Hockey",emoji:true},{v:"🥊",l:"Boxing",emoji:true},{v:"🤼",l:"Wrestling",emoji:true},
+  {v:"🏆",l:"Trophy",emoji:true},{v:"🥇",l:"Gold Medal",emoji:true},{v:"🎖",l:"Medal",emoji:true},
+  {v:"⭐",l:"Star",emoji:true},{v:"🌟",l:"Glowing Star",emoji:true},{v:"🎉",l:"Party",emoji:true},
+  {v:"🎊",l:"Confetti",emoji:true},{v:"🎓",l:"Graduation",emoji:true},{v:"📚",l:"Books",emoji:true},
+  {v:"🎨",l:"Art",emoji:true},{v:"🎵",l:"Music",emoji:true},{v:"🎭",l:"Theater",emoji:true},
+  {v:"🏟",l:"Stadium",emoji:true},{v:"🏃",l:"Running",emoji:true},{v:"🚴",l:"Cycling",emoji:true},
+  {v:"🏊",l:"Swimming",emoji:true},{v:"🤸",l:"Gymnastics",emoji:true},{v:"⛷",l:"Skiing",emoji:true},
+  {v:"🌱",l:"Nature",emoji:true},{v:"🤝",l:"Handshake",emoji:true},{v:"❤️",l:"Heart",emoji:true},
+];
+
+let _iconPickerTarget=null;
+let _iconPickerFiltered=ICON_LIST;
+
+function openIconPicker(which){
+  _iconPickerTarget=which;
+  document.getElementById("iconPickerTitle").textContent="Choose Icon — "+{intramural:"Intramural",student:"Student Life",athletic:"Athletic"}[which];
+  document.getElementById("iconSearchInput").value="";
+  _iconPickerFiltered=ICON_LIST;
+  renderIconGrid();
+  const modal=document.getElementById("iconPickerModal");
+  modal.style.display="flex";
+  setTimeout(()=>document.getElementById("iconSearchInput").focus(),50);
+}
+
+function closeIconPicker(){
+  document.getElementById("iconPickerModal").style.display="none";
+  _iconPickerTarget=null;
+}
+
+function filterIcons(){
+  const q=document.getElementById("iconSearchInput").value.toLowerCase().trim();
+  _iconPickerFiltered=q?ICON_LIST.filter(i=>i.l.toLowerCase().includes(q)||i.v.toLowerCase().includes(q)):ICON_LIST;
+  renderIconGrid();
+}
+
+function renderIconGrid(){
+  const grid=document.getElementById("iconGrid");
+  grid.innerHTML=_iconPickerFiltered.map(i=>{
+    const display=i.emoji?`<span style="font-size:1.6rem;line-height:1;">${i.v}</span>`
+      :`<span class="material-symbols-rounded" style="font-size:1.6rem;">${i.v}</span>`;
+    return`<button class="icon-btn" onclick="selectIcon('${i.v.replace(/'/g,"\\'")}','${i.l.replace(/'/g,"\\'")}',${!!i.emoji})" title="${i.l}">${display}<span class="lbl">${i.l}</span></button>`;
+  }).join("");
+}
+
+function selectIcon(val,label,isEmoji){
+  if(!_iconPickerTarget)return;
+  const which=_iconPickerTarget;
+  // Update preview
+  const prev=document.getElementById("icon-preview-"+which);
+  if(prev)prev.innerHTML=renderIcon(val);
+  const lbl=document.getElementById("icon-label-"+which);
+  if(lbl)lbl.textContent=label;
+  // Save immediately
+  let b={...BRANDING_DEFAULTS};
+  try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
+  b["icon"+which.charAt(0).toUpperCase()+which.slice(1)]=val;
+  try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
+  closeIconPicker();
+  showAdminStatus("brandingStatus","✓ Icon updated — click Save Appearance to keep all changes.","ok");
+}
+
+// Close modal on backdrop click
+document.addEventListener("click",function(e){
+  const modal=document.getElementById("iconPickerModal");
+  if(modal && e.target===modal) closeIconPicker();
+});
+
+// Returns HTML for an icon — Material Symbol name or emoji
+function renderIcon(val){
+  if(!val)return"";
+  // If it looks like an emoji or short symbol (contains non-ascii or is <=2 chars after trim)
+  if(/\p{Emoji}/u.test(val)) return val;
+  // Otherwise treat as Material Symbol ligature name
+  return`<span class="material-symbols-rounded" style="font-size:1.2em;vertical-align:middle;">${val}</span>`;
+}
+
+function getIcons(){
+  let b=BRANDING_DEFAULTS;
+  try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
+  return{intramural:b.iconIntramural||BRANDING_DEFAULTS.iconIntramural,student:b.iconStudent||BRANDING_DEFAULTS.iconStudent,athletic:b.iconAthletic||BRANDING_DEFAULTS.iconAthletic};
+}
+
+function previewIcon(which){
+  const val=document.getElementById("branding-icon-"+which).value.trim();
+  const el=document.getElementById("icon-preview-"+which);
+  if(el)el.innerHTML=renderIcon(val||BRANDING_DEFAULTS["icon"+which.charAt(0).toUpperCase()+which.slice(1)]);
+}
+
+function loadGoogleFont(fontName){
+  if(!fontName)return;
+  const id="gf-"+fontName.replace(/\s+/g,"-").toLowerCase();
+  if(document.getElementById(id))return; // already loaded
+  const link=document.createElement("link");
+  link.id=id;
+  link.rel="stylesheet";
+  link.href="https://fonts.googleapis.com/css2?family="+encodeURIComponent(fontName)+":wght@400;500;600;700;800;900&display=swap";
+  document.head.appendChild(link);
+}
 
 function hexAlpha(hex,alpha){
   const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
