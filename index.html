@@ -600,6 +600,7 @@ td.muted { color:var(--text2); font-size:12px; }
         <button class="anav" onclick="showSection('entries',this)">Entries</button>
         <button class="anav" onclick="showSection('programs',this)">Programs</button>
         <button class="anav" onclick="showSection('settings',this)">Settings</button>
+        <button class="anav" onclick="showSection('archives',this)">Archives</button>
       </div>
       <div class="admin-body">
 
@@ -616,6 +617,7 @@ td.muted { color:var(--text2); font-size:12px; }
               style="flex:1;min-width:160px;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.04em;" />
             <select id="evSortSelect" onchange="renderEventsTable()"
               style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.04em;cursor:pointer;">
+              <option value="status">Status (Open → Upcoming → Closed)</option>
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
               <option value="name">Name A–Z</option>
@@ -797,6 +799,24 @@ td.muted { color:var(--text2); font-size:12px; }
                 <button class="btn btn-gold" onclick="saveSeason()">Save</button>
               </div>
             </div>
+
+            <div class="setting-card" style="grid-column:1/-1;border-color:rgba(220,50,50,0.3);">
+              <h4 style="color:#e05555;">🔄 Season Rollover</h4>
+              <p>Archives all current attendance data to a separate sheet tab, then clears the leaderboard for a fresh season. <strong>This cannot be undone.</strong> Old data is always preserved in your Google Sheet.</p>
+              <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-bottom:10px;">
+                <div class="form-group" style="margin:0;">
+                  <label>New Season Label <span style="font-size:10px;color:var(--text3);">(auto-filled, edit if needed)</span></label>
+                  <input type="text" id="rolloverSeasonInput" placeholder="e.g. 2027–2028 Season" />
+                </div>
+                <button class="btn btn-ghost" onclick="prefillRolloverSeason()" style="white-space:nowrap;flex-shrink:0;">Auto-fill</button>
+              </div>
+              <div class="form-group" style="margin-bottom:12px;">
+                <label>Type <strong>ROLLOVER</strong> to confirm</label>
+                <input type="text" id="rolloverConfirm" placeholder="ROLLOVER" autocomplete="off" style="border-color:rgba(220,50,50,0.4);" />
+              </div>
+              <button class="btn" style="background:#8b2020;color:#fff;border:none;" onclick="doSeasonRollover()">Archive This Season &amp; Start New Season</button>
+              <div class="status-msg" id="rolloverStatus" style="margin-top:8px;"></div>
+            </div>
             <div class="setting-card">
               <h4>Change Admin Password</h4>
               <p>After changing, update the password in the HTML file and re-upload to GitHub to make it permanent.</p>
@@ -805,6 +825,17 @@ td.muted { color:var(--text2); font-size:12px; }
               <button class="btn btn-gold" onclick="changePassword()">Update</button>
               <div class="status-msg" id="pwStatus" style="margin-top:8px;"></div>
             </div>
+          </div>
+        </div>
+
+        <!-- ARCHIVES -->
+        <div class="admin-section" id="sec-archives">
+          <div class="section-row">
+            <div class="section-label">Past Seasons</div>
+            <button class="btn btn-ghost btn-sm" onclick="loadArchives()">↻ Refresh</button>
+          </div>
+          <div id="archivesList" style="padding:1rem 0;">
+            <p style="color:var(--text3);font-size:13px;">Click Refresh to load past seasons.</p>
           </div>
         </div>
 
@@ -1133,6 +1164,8 @@ async function showSection(id,btn){
   document.getElementById("sec-"+id).classList.add("active");
   btn.classList.add("active");
   if(id==="events"){ await syncEventsFromSheet(); renderEventsTable(); }
+  if(id==="settings"){ prefillRolloverSeason(); }
+  if(id==="archives"){ loadArchives(); }
 }
 
 /* ══════════════════════════════════════════
@@ -1494,6 +1527,13 @@ function renderEventsTable(){
   evList=evList.slice().sort((a,b)=>{
     if(sort==="name") return (a.name||"").localeCompare(b.name||"");
     if(sort==="entries") return allData.filter(r=>r["EventID"]===b.id).length - allData.filter(r=>r["EventID"]===a.id).length;
+    if(sort==="status"){
+      const rank={open:0,upcoming:1,closed:2,unknown:3};
+      const ra=rank[liveStatus(a)]??3, rb=rank[liveStatus(b)]??3;
+      if(ra!==rb)return ra-rb;
+      // within same status sort by date ascending
+      return (a.openDT||a.closeDT||"").localeCompare(b.openDT||b.closeDT||"");
+    }
     const dtA=a.openDT||a.closeDT||"";
     const dtB=b.openDT||b.closeDT||"";
     return sort==="oldest" ? dtA.localeCompare(dtB) : dtB.localeCompare(dtA);
@@ -1859,6 +1899,112 @@ function saveSeason(){
   const val=document.getElementById("seasonInput").value.trim();if(!val)return;
   SEASON_LABEL=val;document.getElementById("seasonBadge").textContent="★ "+SEASON_LABEL;
   showAdminStatus("settingsStatus","✓ Season label updated.","ok");
+}
+
+/* ── AUTO-FILL ROLLOVER SEASON LABEL ── */
+function prefillRolloverSeason(){
+  const now=new Date();
+  const y=now.getFullYear();
+  // Academic year: Aug–Dec = current/next, Jan–Jul = prev/current
+  const startYear=now.getMonth()>=7?y:y-1;
+  const label=`${startYear}–${startYear+1} Season`;
+  // Suggest NEXT year
+  const nextStart=startYear+1;
+  document.getElementById("rolloverSeasonInput").value=`${nextStart}–${nextStart+1} Season`;
+}
+
+/* ── SEASON ROLLOVER ── */
+async function doSeasonRollover(){
+  const confirmVal=document.getElementById("rolloverConfirm").value.trim();
+  if(confirmVal!=="ROLLOVER"){
+    showAdminStatus("rolloverStatus","Type ROLLOVER in the confirmation box to proceed.","error");
+    return;
+  }
+  const newLabel=document.getElementById("rolloverSeasonInput").value.trim();
+  if(!newLabel){
+    showAdminStatus("rolloverStatus","Enter a label for the new season.","error");
+    return;
+  }
+  showAdminStatus("rolloverStatus","⏳ Archiving season data…","ok");
+  try{
+    const res=await fetch(API,{method:"POST",body:JSON.stringify({
+      _token:API_SECRET,
+      action:"rolloverSeason",
+      archiveLabel:SEASON_LABEL,
+      newSeasonLabel:newLabel
+    })});
+    const json=await res.json();
+    if(json.ok){
+      SEASON_LABEL=newLabel;
+      document.getElementById("seasonBadge").textContent="★ "+SEASON_LABEL;
+      document.getElementById("seasonInput").value=newLabel;
+      document.getElementById("rolloverConfirm").value="";
+      allData=[];
+      renderLeaderboard();
+      showAdminStatus("rolloverStatus",`✓ Season archived as "${json.archiveSheet}". New season "${newLabel}" is live!`,"ok");
+    } else {
+      showAdminStatus("rolloverStatus","Error: "+(json.error||"Unknown error"),"error");
+    }
+  }catch(e){
+    showAdminStatus("rolloverStatus","Could not reach server. Check connection.","error");
+  }
+}
+
+/* ── ARCHIVES VIEWER ── */
+async function loadArchives(){
+  document.getElementById("archivesList").innerHTML=`<p style="color:var(--text3);font-size:13px;">Loading…</p>`;
+  try{
+    const res=await fetch(API+"?action=getArchives&_token="+API_SECRET);
+    const json=await res.json();
+    if(!json.ok||!json.archives||!json.archives.length){
+      document.getElementById("archivesList").innerHTML=`<p style="color:var(--text3);font-size:13px;">No archived seasons yet. Roll over at the end of a season to create an archive.</p>`;
+      return;
+    }
+    document.getElementById("archivesList").innerHTML=json.archives.map(a=>`
+      <div class="setting-card" style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <h4 style="margin:0;">${a.label}</h4>
+          <span style="font-size:11px;color:var(--text3);">${a.rows} attendance records · archived ${a.archivedOn}</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead><tr style="color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-size:10px;">
+              <th style="text-align:left;padding:4px 8px;border-bottom:1px solid var(--border);">Program</th>
+              <th style="text-align:right;padding:4px 8px;border-bottom:1px solid var(--border);">Points</th>
+              <th style="text-align:right;padding:4px 8px;border-bottom:1px solid var(--border);">Intramural</th>
+              <th style="text-align:right;padding:4px 8px;border-bottom:1px solid var(--border);">Student Life</th>
+              <th style="text-align:right;padding:4px 8px;border-bottom:1px solid var(--border);">Athletic</th>
+            </tr></thead>
+            <tbody>${buildArchiveRows(a.data)}</tbody>
+          </table>
+        </div>
+      </div>`).join("");
+  }catch(e){
+    document.getElementById("archivesList").innerHTML=`<p style="color:#e05555;font-size:13px;">Could not load archives. Check connection.</p>`;
+  }
+}
+
+function buildArchiveRows(data){
+  // Tally points by program from raw attendance rows
+  const tally={};
+  (data||[]).forEach(row=>{
+    const prog=row["Program"]||row["program"]||"Unknown";
+    const type=(row["EventType"]||row["eventType"]||"").toLowerCase();
+    if(!tally[prog])tally[prog]={intramural:0,student:0,athletic:0};
+    if(type==="intramural")tally[prog].intramural++;
+    else if(type==="athletic")tally[prog].athletic++;
+    else tally[prog].student++;
+  });
+  const sorted=Object.entries(tally).map(([prog,t])=>({prog,total:t.intramural+t.student+t.athletic,...t}))
+    .sort((a,b)=>b.total-a.total);
+  if(!sorted.length)return`<tr><td colspan="5" style="text-align:center;padding:1rem;color:var(--text3);">No data</td></tr>`;
+  return sorted.map((r,i)=>`<tr style="${i%2===0?"":"background:var(--bg3)"}">
+    <td style="padding:5px 8px;font-weight:600;">${r.prog}</td>
+    <td style="padding:5px 8px;text-align:right;font-weight:800;color:var(--gold);">${r.total}</td>
+    <td style="padding:5px 8px;text-align:right;color:var(--text2);">${r.intramural}</td>
+    <td style="padding:5px 8px;text-align:right;color:var(--text2);">${r.student}</td>
+    <td style="padding:5px 8px;text-align:right;color:var(--text2);">${r.athletic}</td>
+  </tr>`).join("");
 }
 
 /* ── BRANDING ── */
