@@ -1381,7 +1381,7 @@ function renderLeaderboard(){
     const rankTxt=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
     const t=totals[prog];
     const displayTxt=lbMode==="rate"
-      ?(rate!==null?`<span title="% of class size attending">${rate}%</span>`:"<span style='color:var(--text3)'>—</span>")
+      ?(rate!==null?`<span style="font-size:11px;color:var(--text2);font-style:italic;">ranked</span>`:"<span style='color:var(--text3)'>—</span>")
       :pts.toLocaleString();
 
     // Arrow indicator — compare current rank to snapshot taken when last event closed
