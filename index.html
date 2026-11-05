@@ -525,6 +525,7 @@ td.muted { color:var(--text2); font-size:12px; }
           <div style="display:flex;align-items:center;gap:8px;">
             <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
             <button class="refresh-btn" onclick="window.open('standings-print.html','_blank')">⬆ Export</button>
+            <button class="refresh-btn" id="lbModeBtn" onclick="toggleLbMode()" title="Switch between total points and participation rate">📊 Points</button>
             <div class="tabs">
               <button class="tab active" onclick="setTab('all',this)">All</button>
               <button class="tab" onclick="setTab('intramural',this)">Intramural</button>
@@ -533,6 +534,7 @@ td.muted { color:var(--text2); font-size:12px; }
             </div>
           </div>
         </div>
+        <div id="lbModeNote" style="display:none;padding:6px 1.25rem 0;font-size:11px;color:var(--text2);font-style:italic;">Ranked by % of class attending — higher means more of the program is showing up</div>
         <div class="leaderboard" id="leaderboard"><div class="empty-state">Loading standings…</div></div>
       </div>
     </div>
@@ -971,6 +973,8 @@ const DEFAULT_PROGRAMS = [
   "Plumbing","Precision Agriculture Technology","Respiratory Care",
   "Welding Technology","Welding Technology (Gove County)"
 ];
+// Class sizes keyed by program name — only stored/edited in admin, never shown publicly
+let programSizes = {}; // { "Cosmetology": 8, "Diesel Technology": 12, ... }
 const PROG_COLORS = [
   "#fbbe00","#e8a800","#d49200","#f0a030","#e88c20","#c97a4e","#b86840","#a05530",
   "#8b0e04","#a41208","#c01510","#d42515","#e03520","#ff6b60","#ff8870","#c09050","#d4aa60","#e8c470"
@@ -984,6 +988,7 @@ let allData  = [];
 let events   = [];
 let programs = [...DEFAULT_PROGRAMS];
 let currentTab = "all";
+let lbMode     = "points"; // "points" or "rate"
 let isAdmin    = false;
 let prevRanks  = {}; // rank snapshot for arrow display, keyed by tab then program name
 let editingEventId = null;
@@ -1217,8 +1222,15 @@ async function loadData(){
     }
 
     // Load programs from sheet if available
+    // Sheet may return [{name,size}] objects or plain strings (backward compat)
     if(json.programs && json.programs.length){
-      programs = json.programs;
+      if(typeof json.programs[0]==="object" && json.programs[0].name){
+        programs = json.programs.map(p=>p.name);
+        programSizes = {};
+        json.programs.forEach(p=>{ if(p.size && parseInt(p.size)>0) programSizes[p.name]=parseInt(p.size); });
+      } else {
+        programs = json.programs;
+      }
       rebuildProgramSelect();
       rebuildAdminSelects();
     }
@@ -1313,12 +1325,42 @@ function setTab(tab,btn){
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   btn.classList.add("active");renderLeaderboard();
 }
+function toggleLbMode(){
+  lbMode=lbMode==="points"?"rate":"points";
+  const btn=document.getElementById("lbModeBtn");
+  const note=document.getElementById("lbModeNote");
+  if(btn)btn.textContent=lbMode==="rate"?"📊 Points":"📊 % Rate";
+  if(note)note.style.display=lbMode==="rate"?"block":"none";
+  renderLeaderboard();
+}
+function getRate(pts,prog){
+  const size=programSizes[prog]||0;
+  if(!size)return null; // no size set — can't compute
+  return Math.round((pts/size)*100);
+}
 function renderLeaderboard(){
   const totals=computeStandings();
-  const sorted=[...programs].sort((a,b)=>totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab));
-  const maxPts=Math.max(1,totalFor(totals,sorted[0],currentTab));
+  // Sort: in rate mode, programs with no size set go to the bottom
+  const sorted=[...programs].sort((a,b)=>{
+    if(lbMode==="rate"){
+      const ptsA=totalFor(totals,a,currentTab),ptsB=totalFor(totals,b,currentTab);
+      const rA=getRate(ptsA,a),rB=getRate(ptsB,b);
+      if(rA===null&&rB===null)return ptsB-ptsA;
+      if(rA===null)return 1;
+      if(rB===null)return -1;
+      return rB-rA;
+    }
+    return totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab);
+  });
   const lb=document.getElementById("leaderboard");
-  if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);return;}
+
+  // For bar width, find max value in current mode
+  const vals=sorted.map(p=>{
+    const pts=totalFor(totals,p,currentTab);
+    return lbMode==="rate"?(getRate(pts,p)??0):pts;
+  });
+  const maxVal=Math.max(1,...vals);
+  if(maxVal===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);return;}
 
   // Load snapshot from localStorage (saved when an event closes) — keyed by tab
   let snapRanks={};
@@ -1329,12 +1371,18 @@ function renderLeaderboard(){
   sorted.forEach((prog,i)=>currRanks[prog]=i+1);
 
   lb.innerHTML=sorted.map((prog,i)=>{
-    const pts=totalFor(totals,prog,currentTab),pct=Math.round((pts/maxPts)*100);
+    const pts=totalFor(totals,prog,currentTab);
+    const rate=getRate(pts,prog);
+    const displayVal=lbMode==="rate"?(rate!==null?rate:0):pts;
+    const barPct=Math.round((displayVal/maxVal)*100);
     const color=PROG_COLORS[programs.indexOf(prog)%PROG_COLORS.length];
     const rankCls=i===0?"r1":i===1?"r2":i===2?"r3":"rn";
     const rowCls=i===0?"top1":i===1?"top2":i===2?"top3":"";
     const rankTxt=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
     const t=totals[prog];
+    const displayTxt=lbMode==="rate"
+      ?(rate!==null?`<span title="% of class size attending">${rate}%</span>`:"<span style='color:var(--text3)'>—</span>")
+      :pts.toLocaleString();
 
     // Arrow indicator — compare current rank to snapshot taken when last event closed
     let arrow="";
@@ -1351,8 +1399,8 @@ function renderLeaderboard(){
         <div class="prog-name">${prog}${arrow}</div>
         <div class="prog-breakdown">I: ${t.intramural} &nbsp;·&nbsp; S: ${t.student} &nbsp;·&nbsp; A: ${t.athletic}</div>
       </div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
-      <span class="pts-col">${pts.toLocaleString()}</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${barPct}%;background:${color};"></div></div>
+      <span class="pts-col">${displayTxt}</span>
     </div>`;
   }).join("");
 
@@ -1845,9 +1893,14 @@ function rebuildProgramSelect(){
 }
 rebuildProgramSelect();
 function renderAdminProgList(){
-  document.getElementById("adminProgList").innerHTML=programs.map((p,i)=>`
+  document.getElementById("adminProgList").innerHTML=programs.map((p,i)=>{
+    const sz=programSizes[p]||"";
+    return `
     <div class="prog-item">
-      <div class="prog-item-name">${p}</div>
+      <div class="prog-item-name" style="flex:1;">${p}</div>
+      <input type="number" min="1" max="999" placeholder="# students" title="Class size for participation % view"
+        value="${sz}" style="width:90px;padding:4px 6px;font-size:12px;border-radius:5px;border:1px solid var(--border2);background:var(--bg4);color:var(--text);"
+        onchange="setProgSize(${i},this.value)" />
       <button class="btn btn-ghost btn-sm" onclick="startRename(${i})">Rename</button>
       <button class="btn btn-danger btn-sm" onclick="deleteProg(${i})">Remove</button>
     </div>
@@ -1857,18 +1910,29 @@ function renderAdminProgList(){
         <button class="btn btn-gold btn-sm" onclick="saveRename(${i})">Save</button>
         <button class="btn btn-ghost btn-sm" onclick="cancelRename(${i})">Cancel</button>
       </div>
-    </div>`
-  ).join("");
+    </div>`;
+  }).join("");
+}
+function setProgSize(i,val){
+  const name=programs[i];
+  const n=parseInt(val)||0;
+  if(n>0)programSizes[name]=n; else delete programSizes[name];
+  savePrograms();
+  renderLeaderboard();
 }
 function startRename(i){document.getElementById("progedit-"+i).style.display="block";document.getElementById("proginput-"+i).focus();}
 function cancelRename(i){document.getElementById("progedit-"+i).style.display="none";}
 function saveRename(i){
+  const oldName=programs[i];
   const val=document.getElementById("proginput-"+i).value.trim();if(!val)return;
+  // carry size to new name
+  if(programSizes[oldName]){programSizes[val]=programSizes[oldName];delete programSizes[oldName];}
   programs[i]=val;renderAdminProgList();rebuildProgramSelect();rebuildAdminSelects();savePrograms();
   showAdminStatus("programsStatus",`✓ Renamed to "${val}".`,"ok");
 }
 function deleteProg(i){
   if(!confirm(`Remove "${programs[i]}"?`))return;
+  delete programSizes[programs[i]];
   programs.splice(i,1);renderAdminProgList();rebuildProgramSelect();rebuildAdminSelects();savePrograms();
   showAdminStatus("programsStatus","✓ Program removed.","ok");
 }
@@ -1885,7 +1949,9 @@ function addProgram(){
 ══════════════════════════════════════════ */
 async function savePrograms(){
   try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"savePrograms",programs})});
+    // Send programs as array of {name, size} objects so the sheet stores sizes
+    const payload=programs.map(p=>({name:p,size:programSizes[p]||0}));
+    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"savePrograms",programs:payload})});
     showAdminStatus("programsStatus","✓ Programs saved.","ok");
   }catch(e){
     showAdminStatus("programsStatus","Saved locally but failed to sync to sheet.","err");
