@@ -1864,6 +1864,17 @@ function saveSeason(){
 const BRANDING_KEY="tplBranding";
 const BRANDING_DEFAULTS={logo:"🐯",logoIsImage:false,school:"Fort Hays Tech | Northwest — Goodland, KS",title:"Tiger Pride",gold:"#fbbe00",crimson:"#8b0e04",fontDisplay:"Barlow Condensed",fontBody:"Barlow",iconIntramural:"⚽",iconStudent:"🎉",iconAthletic:"🏟"};
 
+async function loadBranding(){
+  try{
+    const res=await fetch(API+"?action=getBranding&_token="+API_SECRET);
+    const json=await res.json();
+    if(json.ok && json.branding){
+      try{localStorage.setItem(BRANDING_KEY,JSON.stringify(json.branding));}catch(_){}
+    }
+  }catch(_){}
+  applyBranding();
+}
+
 function applyBranding(){
   let b=BRANDING_DEFAULTS;
   try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},BRANDING_DEFAULTS,JSON.parse(s));}catch(_){}
@@ -1922,7 +1933,7 @@ function applyBranding(){
   const chEl=document.getElementById("branding-crimson-hex");if(chEl)chEl.value=b.crimson;
 }
 
-function saveBranding(){
+async function saveBranding(){
   let existing={...BRANDING_DEFAULTS};
   try{const s=localStorage.getItem(BRANDING_KEY);if(s)existing=Object.assign({},existing,JSON.parse(s));}catch(_){}
   const b={
@@ -1940,35 +1951,51 @@ function saveBranding(){
   };
   try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
   applyBranding();
-  showAdminStatus("brandingStatus","✓ Appearance saved.","ok");
+  showAdminStatus("brandingStatus","⏳ Saving…","ok");
+  try{
+    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveBranding",branding:b})});
+    showAdminStatus("brandingStatus","✓ Appearance saved for everyone.","ok");
+  }catch(e){
+    showAdminStatus("brandingStatus","✓ Saved locally — could not reach server.","ok");
+  }
 }
 
 function handleLogoUpload(input){
   const file=input.files[0];
   if(!file)return;
   const reader=new FileReader();
-  reader.onload=function(e){
+  reader.onload=async function(e){
     const dataUrl=e.target.result;
-    // Save immediately to localStorage
     let b={...BRANDING_DEFAULTS};
     try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
     b.logo=dataUrl;
     b.logoIsImage=true;
     try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
     applyBranding();
-    showAdminStatus("brandingStatus","✓ Logo uploaded.","ok");
+    showAdminStatus("brandingStatus","⏳ Uploading logo…","ok");
+    try{
+      await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveBranding",branding:b})});
+      showAdminStatus("brandingStatus","✓ Logo saved for everyone.","ok");
+    }catch(e){
+      showAdminStatus("brandingStatus","✓ Logo saved locally — could not reach server.","ok");
+    }
   };
   reader.readAsDataURL(file);
 }
 
-function clearLogo(){
+async function clearLogo(){
   let b={...BRANDING_DEFAULTS};
   try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
   b.logo="🐯";
   b.logoIsImage=false;
   try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
   applyBranding();
-  showAdminStatus("brandingStatus","✓ Reset to emoji.","ok");
+  try{
+    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveBranding",branding:b})});
+    showAdminStatus("brandingStatus","✓ Reset to emoji for everyone.","ok");
+  }catch(e){
+    showAdminStatus("brandingStatus","✓ Reset locally — could not reach server.","ok");
+  }
 }
 
 function resetBranding(){
@@ -2300,8 +2327,7 @@ function toggleTheme() {
 /* ══════════════════════════════════════════
    INIT — auto-refresh every 60s, re-evaluate event statuses every 30s
 ══════════════════════════════════════════ */
-applyBranding();
-loadData().then(() => handleQRCheckin());
+loadBranding().then(()=>loadData()).then(()=>handleQRCheckin());
 setInterval(loadData,60000);
 // Re-evaluate scheduled open/close without a full reload
 setInterval(()=>{renderEventDropdown();renderUpcomingEvents();if(isAdmin)renderEventsTable();},30000);
