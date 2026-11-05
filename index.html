@@ -1528,7 +1528,7 @@ function renderEventsTable(){
     if(sort==="name") return (a.name||"").localeCompare(b.name||"");
     if(sort==="entries") return allData.filter(r=>r["EventID"]===b.id).length - allData.filter(r=>r["EventID"]===a.id).length;
     if(sort==="status"){
-      const rank={open:0,upcoming:1,closed:2,unknown:3};
+      const rank={open:0,scheduled:1,ended:2,closed:2,unknown:3};
       const ra=rank[liveStatus(a)]??3, rb=rank[liveStatus(b)]??3;
       if(ra!==rb)return ra-rb;
       // within same status sort by date ascending
