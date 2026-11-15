@@ -2,20 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<!-- v2 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Tiger Pride Leaderboard | Fort Hays Tech Northwest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-<style>.material-symbols-rounded{font-family:'Material Symbols Rounded';font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;line-height:1;display:inline-block;white-space:nowrap;}</style>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --gold:#fbbe00; --gold-dim:rgba(251,190,0,0.12); --gold-dim2:rgba(251,190,0,0.22);
   --crimson:#8b0e04; --crimson-light:rgba(139,14,4,0.18);
-  --font-display:'Barlow Condensed',sans-serif; --font-body:'Barlow',sans-serif;
   --bg:#111; --bg2:#1a1a1a; --bg3:#222; --bg4:#2b2b2b;
   --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
   --text:#f5f5f5; --text2:#999; --text3:#555;
@@ -45,7 +41,7 @@ body.light .edit-row { background:var(--bg3); }
 body.light .feed-list::-webkit-scrollbar-thumb { background:var(--bg4); }
 body.light .panel-header { background:var(--bg3); }
 html,body { max-width:100%; overflow-x:hidden; }
-body { font-family:var(--font-body); background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; line-height:1.5; }
+body { font-family:'Barlow',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; line-height:1.5; }
 
 /* HEADER */
 .header { background:#0d0d0d; border-bottom:3px solid var(--gold); }
@@ -53,8 +49,8 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); mi
 .header-inner { max-width:1120px; margin:0 auto; padding:1.25rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
 .logo-area { display:flex; align-items:center; gap:16px; }
 .paw { font-size:2.6rem; line-height:1; filter:drop-shadow(0 0 12px rgba(251,190,0,0.4)); cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; }
-.school-name { font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
-.tracker-name { font-family:var(--font-display); font-size:2rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:#f5f5f5; line-height:1; min-width:0; }
+.school-name { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
+.tracker-name { font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:#f5f5f5; line-height:1; min-width:0; }
 .tracker-name span { color:var(--gold); }
 .header-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
 .legend { display:flex; gap:12px; flex-wrap:wrap; }
@@ -100,11 +96,10 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); mi
   /* ── HEADER: single tight row on mobile ── */
   .header-inner   { flex-wrap:nowrap; align-items:center; gap:6px; padding:.6rem .9rem; overflow:hidden; }
   .logo-area      { gap:7px; min-width:0; flex:1 1 0; overflow:hidden; }
-  .paw            { font-size:1.5rem; flex-shrink:0; width:44px; height:44px; display:flex; align-items:center; justify-content:center; }
-  .paw img        { width:44px; height:44px; object-fit:contain; border-radius:4px; }
+  .paw            { font-size:1.5rem; flex-shrink:0; }
   .title-block    { min-width:0; overflow:hidden; }
   .school-name    { display:none; }
-  .tracker-name   { font-size:1.15rem; white-space:normal; overflow:visible; text-overflow:unset; min-width:0; line-height:1.1; }
+  .tracker-name   { font-size:1.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
   .header-right   { flex-direction:row; align-items:center; gap:5px; flex-shrink:0; flex-wrap:nowrap; }
   .legend         { display:none; }
   .season-badge   { display:none; }
@@ -199,7 +194,7 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); mi
 .prog-row.top1 { border-left-color:var(--gold); background:rgba(251,190,0,0.04); }
 .prog-row.top2 { border-left-color:#b0b0b0; }
 .prog-row.top3 { border-left-color:#c97a4e; }
-.rank { font-family:var(--font-display); font-size:13px; font-weight:800; min-width:28px; text-align:center; }
+.rank { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:800; min-width:28px; text-align:center; }
 .rank.r1 { color:var(--gold); font-size:18px; } .rank.r2 { color:#c0c0c0; font-size:16px; } .rank.r3 { color:#c97a4e; font-size:16px; } .rank.rn { color:var(--text3); font-size:12px; }
 .prog-info { flex:1; min-width:0; }
 .prog-name { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -379,12 +374,6 @@ td.muted { color:var(--text2); font-size:12px; }
 .add-row input { flex:1; }
 
 /* STATUS */
-.icon-slot { background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .15s; }
-.icon-slot:hover { border-color:var(--gold); }
-.icon-grid { display:flex;flex-wrap:wrap;gap:6px; }
-.icon-btn { background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px;transition:all .15s;color:var(--text); }
-.icon-btn:hover { border-color:var(--gold);background:var(--gold-dim); }
-.icon-btn span.lbl { font-size:9px;color:var(--text3);text-align:center;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
 .status-msg { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; padding:6px 12px; border-radius:var(--radius); margin-bottom:10px; display:none; line-height:1.4; }
 .status-msg.ok  { background:rgba(46,204,138,0.12); border:1px solid rgba(46,204,138,0.3); color:#5ADBA4; display:block; }
 .status-msg.err { background:rgba(232,69,69,0.12);  border:1px solid rgba(232,69,69,0.3);  color:#f07070; display:block; }
@@ -524,8 +513,6 @@ td.muted { color:var(--text2); font-size:12px; }
           <h2>Program Standings</h2>
           <div style="display:flex;align-items:center;gap:8px;">
             <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
-            <button class="refresh-btn" onclick="window.open('standings-print.html','_blank')">⬆ Export</button>
-            <button class="refresh-btn" id="lbModeBtn" onclick="toggleLbMode()" title="Switch between total points and participation rate">📊 Points</button>
             <div class="tabs">
               <button class="tab active" onclick="setTab('all',this)">All</button>
               <button class="tab" onclick="setTab('intramural',this)">Intramural</button>
@@ -534,7 +521,6 @@ td.muted { color:var(--text2); font-size:12px; }
             </div>
           </div>
         </div>
-        <div id="lbModeNote" style="display:none;padding:6px 1.25rem 0;font-size:11px;color:var(--text2);font-style:italic;">Ranked by % of class attending — higher means more of the program is showing up</div>
         <div class="leaderboard" id="leaderboard"><div class="empty-state">Loading standings…</div></div>
       </div>
     </div>
@@ -602,7 +588,6 @@ td.muted { color:var(--text2); font-size:12px; }
         <button class="anav" onclick="showSection('entries',this)">Entries</button>
         <button class="anav" onclick="showSection('programs',this)">Programs</button>
         <button class="anav" onclick="showSection('settings',this)">Settings</button>
-        <button class="anav" onclick="showSection('archives',this)">Archives</button>
       </div>
       <div class="admin-body">
 
@@ -619,7 +604,6 @@ td.muted { color:var(--text2); font-size:12px; }
               style="flex:1;min-width:160px;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.04em;" />
             <select id="evSortSelect" onchange="renderEventsTable()"
               style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.04em;cursor:pointer;">
-              <option value="status">Status (Open → Upcoming → Closed)</option>
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
               <option value="name">Name A–Z</option>
@@ -678,121 +662,6 @@ td.muted { color:var(--text2); font-size:12px; }
           <div class="section-label">Site Settings</div>
           <div class="status-msg" id="settingsStatus"></div>
           <div class="settings-grid">
-
-            <!-- ── APPEARANCE ── -->
-            <div class="setting-card" style="grid-column:1/-1;">
-              <h4>Appearance</h4>
-              <p style="margin-bottom:14px;">Customize the header. Changes save locally in this browser — they won't affect other devices unless you make the same changes there.</p>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
-
-                <div class="form-group" style="margin:0;">
-                  <label>Logo / Icon</label>
-                  <div style="display:flex;align-items:center;gap:10px;">
-                    <div id="branding-logo-preview" style="width:52px;height:52px;border-radius:8px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;flex-shrink:0;background:var(--bg2);">🐯</div>
-                    <div style="flex:1;">
-                      <label class="btn btn-ghost" style="cursor:pointer;display:inline-block;padding:6px 14px;font-size:12px;margin:0;">
-                        Upload Image
-                        <input type="file" id="branding-logo-file" accept="image/*" style="display:none;" onchange="handleLogoUpload(this)" />
-                      </label>
-                      <div style="font-size:11px;color:var(--text3);margin-top:4px;">PNG, JPG, SVG — any size</div>
-                      <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px;margin-top:4px;" onclick="clearLogo()">Use Emoji Instead</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group" style="margin:0;">
-                  <label>School Name <span style="font-weight:400;color:var(--text3);">(top line)</span></label>
-                  <input type="text" id="branding-school" placeholder="Fort Hays Tech | Northwest — Goodland, KS" />
-                </div>
-
-                <div class="form-group" style="margin:0;">
-                  <label>Leaderboard Title <span style="font-weight:400;color:var(--text3);">(big text)</span></label>
-                  <input type="text" id="branding-title" placeholder="Tiger Pride" />
-                  <span style="font-size:11px;color:var(--text3);">The word after this stays as "Leaderboard"</span>
-                </div>
-
-                <div class="form-group" style="margin:0;">
-                  <label>Header Font <span style="font-weight:400;color:var(--text3);">(titles &amp; ranks)</span></label>
-                  <input type="text" id="branding-font-display" placeholder="Barlow Condensed" />
-                  <span style="font-size:11px;color:var(--text3);">Any <a href="https://fonts.google.com" target="_blank" style="color:var(--gold);">Google Font</a> name, e.g. Oswald, Bebas Neue, Anton</span>
-                </div>
-
-                <div class="form-group" style="margin:0;">
-                  <label>Body Font <span style="font-weight:400;color:var(--text3);">(labels &amp; text)</span></label>
-                  <input type="text" id="branding-font-body" placeholder="Barlow" />
-                  <span style="font-size:11px;color:var(--text3);">Any <a href="https://fonts.google.com" target="_blank" style="color:var(--gold);">Google Font</a> name, e.g. Inter, Roboto, Lato</span>
-                </div>
-
-                <!-- Event type icons -->
-                <div class="form-group" style="margin:0;grid-column:1/-1;">
-                  <label>Event Type Icons</label>
-                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:8px;">
-                    <div id="icon-slot-intramural" class="icon-slot" onclick="openIconPicker('intramural')">
-                      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Intramural</div>
-                      <div style="display:flex;align-items:center;gap:8px;">
-                        <span id="icon-preview-intramural" style="font-size:1.8rem;line-height:1;">⚽</span>
-                        <span style="font-size:12px;color:var(--text2);" id="icon-label-intramural">Soccer Ball</span>
-                        <span style="margin-left:auto;font-size:11px;color:var(--gold);">Change ▸</span>
-                      </div>
-                    </div>
-                    <div id="icon-slot-student" class="icon-slot" onclick="openIconPicker('student')">
-                      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Student Life</div>
-                      <div style="display:flex;align-items:center;gap:8px;">
-                        <span id="icon-preview-student" style="font-size:1.8rem;line-height:1;">🎉</span>
-                        <span style="font-size:12px;color:var(--text2);" id="icon-label-student">Party Popper</span>
-                        <span style="margin-left:auto;font-size:11px;color:var(--gold);">Change ▸</span>
-                      </div>
-                    </div>
-                    <div id="icon-slot-athletic" class="icon-slot" onclick="openIconPicker('athletic')">
-                      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Athletic</div>
-                      <div style="display:flex;align-items:center;gap:8px;">
-                        <span id="icon-preview-athletic" style="font-size:1.8rem;line-height:1;">🏟</span>
-                        <span style="font-size:12px;color:var(--text2);" id="icon-label-athletic">Stadium</span>
-                        <span style="margin-left:auto;font-size:11px;color:var(--gold);">Change ▸</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Icon picker modal -->
-                <div id="iconPickerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
-                  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:20px;width:min(520px,95vw);max-height:80vh;display:flex;flex-direction:column;gap:12px;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;">
-                      <h4 style="margin:0;" id="iconPickerTitle">Choose Icon — Intramural</h4>
-                      <button onclick="closeIconPicker()" style="background:none;border:none;color:var(--text2);font-size:1.4rem;cursor:pointer;line-height:1;">✕</button>
-                    </div>
-                    <input type="text" id="iconSearchInput" placeholder="Search icons… (e.g. trophy, ball, star)" oninput="filterIcons()" style="width:100%;" />
-                    <div style="overflow-y:auto;flex:1;">
-                      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em;">Sports &amp; Activities</div>
-                      <div class="icon-grid" id="iconGrid"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group" style="margin:0;">
-                  <label>Accent Color <span style="font-weight:400;color:var(--text3);">(gold)</span></label>
-                  <div style="display:flex;gap:8px;align-items:center;">
-                    <input type="color" id="branding-gold" value="#fbbe00" style="width:48px;height:36px;border-radius:6px;border:1px solid var(--border);background:none;cursor:pointer;padding:2px;" />
-                    <input type="text" id="branding-gold-hex" placeholder="#fbbe00" style="flex:1;" oninput="syncColorFromHex('gold')" />
-                  </div>
-                </div>
-
-                <div class="form-group" style="margin:0;">
-                  <label>Stripe Color <span style="font-weight:400;color:var(--text3);">(crimson)</span></label>
-                  <div style="display:flex;gap:8px;align-items:center;">
-                    <input type="color" id="branding-crimson" value="#8b0e04" style="width:48px;height:36px;border-radius:6px;border:1px solid var(--border);background:none;cursor:pointer;padding:2px;" />
-                    <input type="text" id="branding-crimson-hex" placeholder="#8b0e04" style="flex:1;" oninput="syncColorFromHex('crimson')" />
-                  </div>
-                </div>
-
-              </div>
-              <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
-                <button class="btn btn-gold" onclick="saveBranding()">Save Appearance</button>
-                <button class="btn btn-ghost" onclick="resetBranding()">Reset to Defaults</button>
-              </div>
-              <div class="status-msg" id="brandingStatus" style="margin-top:8px;"></div>
-            </div>
-
             <div class="setting-card">
               <h4>Season Label</h4>
               <p>Shown in the header badge.</p>
@@ -800,24 +669,6 @@ td.muted { color:var(--text2); font-size:12px; }
                 <input type="text" id="seasonInput" value="2026–2027 Season" />
                 <button class="btn btn-gold" onclick="saveSeason()">Save</button>
               </div>
-            </div>
-
-            <div class="setting-card" style="grid-column:1/-1;border-color:rgba(220,50,50,0.3);">
-              <h4 style="color:#e05555;">🔄 Season Rollover</h4>
-              <p>Archives all current attendance data to a separate sheet tab, then clears the leaderboard for a fresh season. <strong>This cannot be undone.</strong> Old data is always preserved in your Google Sheet.</p>
-              <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-bottom:10px;">
-                <div class="form-group" style="margin:0;">
-                  <label>New Season Label <span style="font-size:10px;color:var(--text3);">(auto-filled, edit if needed)</span></label>
-                  <input type="text" id="rolloverSeasonInput" placeholder="e.g. 2027–2028 Season" />
-                </div>
-                <button class="btn btn-ghost" onclick="prefillRolloverSeason()" style="white-space:nowrap;flex-shrink:0;">Auto-fill</button>
-              </div>
-              <div class="form-group" style="margin-bottom:12px;">
-                <label>Type <strong>ROLLOVER</strong> to confirm</label>
-                <input type="text" id="rolloverConfirm" placeholder="ROLLOVER" autocomplete="off" style="border-color:rgba(220,50,50,0.4);" />
-              </div>
-              <button class="btn" style="background:#8b2020;color:#fff;border:none;" onclick="doSeasonRollover()">Archive This Season &amp; Start New Season</button>
-              <div class="status-msg" id="rolloverStatus" style="margin-top:8px;"></div>
             </div>
             <div class="setting-card">
               <h4>Change Admin Password</h4>
@@ -827,17 +678,6 @@ td.muted { color:var(--text2); font-size:12px; }
               <button class="btn btn-gold" onclick="changePassword()">Update</button>
               <div class="status-msg" id="pwStatus" style="margin-top:8px;"></div>
             </div>
-          </div>
-        </div>
-
-        <!-- ARCHIVES -->
-        <div class="admin-section" id="sec-archives">
-          <div class="section-row">
-            <div class="section-label">Past Seasons</div>
-            <button class="btn btn-ghost btn-sm" onclick="loadArchives()">↻ Refresh</button>
-          </div>
-          <div id="archivesList" style="padding:1rem 0;">
-            <p style="color:var(--text3);font-size:13px;">Click Refresh to load past seasons.</p>
           </div>
         </div>
 
@@ -973,8 +813,6 @@ const DEFAULT_PROGRAMS = [
   "Plumbing","Precision Agriculture Technology","Respiratory Care",
   "Welding Technology","Welding Technology (Gove County)"
 ];
-// Class sizes keyed by program name — only stored/edited in admin, never shown publicly
-let programSizes = {}; // { "Cosmetology": 8, "Diesel Technology": 12, ... }
 const PROG_COLORS = [
   "#fbbe00","#e8a800","#d49200","#f0a030","#e88c20","#c97a4e","#b86840","#a05530",
   "#8b0e04","#a41208","#c01510","#d42515","#e03520","#ff6b60","#ff8870","#c09050","#d4aa60","#e8c470"
@@ -988,9 +826,7 @@ let allData  = [];
 let events   = [];
 let programs = [...DEFAULT_PROGRAMS];
 let currentTab = "all";
-let lbMode     = "points"; // "points" or "rate"
 let isAdmin    = false;
-let prevRanks  = {}; // rank snapshot for arrow display, keyed by tab then program name
 let editingEventId = null;
 
 /* ══════════════════════════════════════════
@@ -1056,12 +892,16 @@ function fmtDateShort(str) {
 function liveStatus(ev) {
   if (ev.statusOverride === "open")   return "open";
   if (ev.statusOverride === "closed") return "closed";
+  const BUFFER_MS = 60 * 60 * 1000; // 1-hour buffer before open and after close
   const now    = new Date();
   const opens  = ev.openDT  ? parseLocalDT(ev.openDT)  : null;
   const closes = ev.closeDT ? parseLocalDT(ev.closeDT) : null;
-  if (opens  && now < opens)  return "scheduled";
-  if (closes && now > closes) return "ended";
-  if (opens || closes)        return "open";
+  // Open 1hr early, stay open 1hr past close time
+  const effectiveOpen  = opens  ? new Date(opens.getTime()  - BUFFER_MS) : null;
+  const effectiveClose = closes ? new Date(closes.getTime() + BUFFER_MS) : null;
+  if (effectiveOpen  && now < effectiveOpen)  return "scheduled";
+  if (effectiveClose && now > effectiveClose) return "ended";
+  if (effectiveOpen || effectiveClose)        return "open";
   return "closed";
 }
 
@@ -1169,8 +1009,6 @@ async function showSection(id,btn){
   document.getElementById("sec-"+id).classList.add("active");
   btn.classList.add("active");
   if(id==="events"){ await syncEventsFromSheet(); renderEventsTable(); }
-  if(id==="settings"){ prefillRolloverSeason(); }
-  if(id==="archives"){ loadArchives(); }
 }
 
 /* ══════════════════════════════════════════
@@ -1222,15 +1060,8 @@ async function loadData(){
     }
 
     // Load programs from sheet if available
-    // Sheet may return [{name,size}] objects or plain strings (backward compat)
     if(json.programs && json.programs.length){
-      if(typeof json.programs[0]==="object" && json.programs[0].name){
-        programs = json.programs.map(p=>p.name);
-        programSizes = {};
-        json.programs.forEach(p=>{ if(p.size && parseInt(p.size)>0) programSizes[p.name]=parseInt(p.size); });
-      } else {
-        programs = json.programs;
-      }
+      programs = json.programs;
       rebuildProgramSelect();
       rebuildAdminSelects();
     }
@@ -1325,85 +1156,29 @@ function setTab(tab,btn){
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   btn.classList.add("active");renderLeaderboard();
 }
-function toggleLbMode(){
-  lbMode=lbMode==="points"?"rate":"points";
-  const btn=document.getElementById("lbModeBtn");
-  const note=document.getElementById("lbModeNote");
-  if(btn)btn.textContent=lbMode==="rate"?"📊 Points":"📊 % Rate";
-  if(note)note.style.display=lbMode==="rate"?"block":"none";
-  renderLeaderboard();
-}
-function getRate(pts,prog){
-  const size=programSizes[prog]||0;
-  if(!size)return null; // no size set — can't compute
-  return Math.round((pts/size)*100);
-}
 function renderLeaderboard(){
   const totals=computeStandings();
-  // Sort: in rate mode, programs with no size set go to the bottom
-  const sorted=[...programs].sort((a,b)=>{
-    if(lbMode==="rate"){
-      const ptsA=totalFor(totals,a,currentTab),ptsB=totalFor(totals,b,currentTab);
-      const rA=getRate(ptsA,a),rB=getRate(ptsB,b);
-      if(rA===null&&rB===null)return ptsB-ptsA;
-      if(rA===null)return 1;
-      if(rB===null)return -1;
-      return rB-rA;
-    }
-    return totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab);
-  });
+  const sorted=[...programs].sort((a,b)=>totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab));
+  const maxPts=Math.max(1,totalFor(totals,sorted[0],currentTab));
   const lb=document.getElementById("leaderboard");
-
-  // For bar width, find max value in current mode
-  const vals=sorted.map(p=>{
-    const pts=totalFor(totals,p,currentTab);
-    return lbMode==="rate"?(getRate(pts,p)??0):pts;
-  });
-  const maxVal=Math.max(1,...vals);
-  if(maxVal===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);return;}
-
-  // Load snapshot from localStorage (saved when an event closes) — keyed by tab
-  let snapRanks={};
-  try{const s=localStorage.getItem("tplRankSnap");if(s){const all=JSON.parse(s);snapRanks=all[currentTab]||{};}}catch(_){}
-
-  // Build current rank map, then compare to snapshot
-  const currRanks={};
-  sorted.forEach((prog,i)=>currRanks[prog]=i+1);
-
+  if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);return;}
   lb.innerHTML=sorted.map((prog,i)=>{
-    const pts=totalFor(totals,prog,currentTab);
-    const rate=getRate(pts,prog);
-    const displayVal=lbMode==="rate"?(rate!==null?rate:0):pts;
-    const barPct=Math.round((displayVal/maxVal)*100);
+    const pts=totalFor(totals,prog,currentTab),pct=Math.round((pts/maxPts)*100);
     const color=PROG_COLORS[programs.indexOf(prog)%PROG_COLORS.length];
     const rankCls=i===0?"r1":i===1?"r2":i===2?"r3":"rn";
     const rowCls=i===0?"top1":i===1?"top2":i===2?"top3":"";
     const rankTxt=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
     const t=totals[prog];
-    const displayTxt=lbMode==="rate"
-      ?(rate!==null?`<span style="font-size:11px;color:var(--text2);font-style:italic;">ranked</span>`:"<span style='color:var(--text3)'>—</span>")
-      :pts.toLocaleString();
-
-    // Arrow indicator — compare current rank to snapshot taken when last event closed
-    let arrow="";
-    if(snapRanks[prog]!==undefined){
-      const diff=snapRanks[prog]-currRanks[prog]; // positive = moved up
-      if(diff>0)      arrow=`<span style="color:#2ECC8A;font-size:12px;font-weight:800;margin-left:6px;">▲${diff}</span>`;
-      else if(diff<0) arrow=`<span style="color:#e84545;font-size:12px;font-weight:800;margin-left:6px;">▼${Math.abs(diff)}</span>`;
-      else            arrow=`<span style="color:#888;font-size:12px;margin-left:6px;">—</span>`;
-    }
-
     return `<div class="prog-row ${rowCls}">
       <span class="rank ${rankCls}">${rankTxt}</span>
       <div class="prog-info">
-        <div class="prog-name">${prog}${arrow}</div>
+        <div class="prog-name">${prog}</div>
         <div class="prog-breakdown">I: ${t.intramural} &nbsp;·&nbsp; S: ${t.student} &nbsp;·&nbsp; A: ${t.athletic}</div>
       </div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${barPct}%;background:${color};"></div></div>
-      <span class="pts-col">${displayTxt}</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
+      <span class="pts-col">${pts.toLocaleString()}</span>
     </div>`;
   }).join("");
-
   updateStats(totals,sorted);
 }
 function updateStats(totals,sorted){
@@ -1467,8 +1242,7 @@ function renderUpcomingEvents(){
       if(ev.openDT) return fmtDT(ev.openDT);
       return "";
     })();
-    const _icons=getIcons();
-    const typeLabel = typeRaw==="intramural"?renderIcon(_icons.intramural)+" Intramural":typeRaw==="athletic"?renderIcon(_icons.athletic)+" Athletic":renderIcon(_icons.student)+" Student Life";
+    const typeLabel = typeRaw==="intramural"?"⚽ Intramural":typeRaw==="athletic"?"🏟 Athletic":"🎉 Student Life";
     return `<div class="upcoming-card ${type}">
       <div class="uc-type">${typeLabel}</div>
       ${statusChip}
@@ -1575,13 +1349,6 @@ function renderEventsTable(){
   evList=evList.slice().sort((a,b)=>{
     if(sort==="name") return (a.name||"").localeCompare(b.name||"");
     if(sort==="entries") return allData.filter(r=>r["EventID"]===b.id).length - allData.filter(r=>r["EventID"]===a.id).length;
-    if(sort==="status"){
-      const rank={open:0,scheduled:1,ended:2,closed:2,unknown:3};
-      const ra=rank[liveStatus(a)]??3, rb=rank[liveStatus(b)]??3;
-      if(ra!==rb)return ra-rb;
-      // within same status sort by date ascending
-      return (a.openDT||a.closeDT||"").localeCompare(b.openDT||b.closeDT||"");
-    }
     const dtA=a.openDT||a.closeDT||"";
     const dtB=b.openDT||b.closeDT||"";
     return sort==="oldest" ? dtA.localeCompare(dtB) : dtB.localeCompare(dtA);
@@ -1652,16 +1419,16 @@ async function syncEventsFromSheet(){
     const fr=await fetch(API+"?action=getAll&_token="+API_SECRET);
     const fj=await fr.json();
     if(fj.events && fj.events.length){
-      fj.events.forEach(fe=>{
-        // Auto-assign an id to events that were added in the sheet with no id.
-        // We patch the sheet immediately so future syncs find the same id.
+      fj.events.forEach((fe,i)=>{
+        // If the sheet row has no id, assign a temporary one IN MEMORY ONLY
+        // (never written back to the sheet). Uses index to keep them unique.
         if(!fe.id){
-          fe.id="evt_"+Date.now()+"_"+Math.random().toString(36).slice(2,7);
-          fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"updateEvent",event:fe})});
+          fe.id="__tmp_"+i+"_"+fe.name.replace(/\W+/g,"").slice(0,12);
+          fe.__noSheetId=true; // flag: this id doesn't exist in the sheet
         }
-        // Match by id; for blank-id events fall back to matching by name+type
-        let idx=fe.id?events.findIndex(e=>e.id===fe.id):-1;
-        if(idx<0 && fe.name) idx=events.findIndex(e=>!e.id&&e.name===fe.name&&e.type===fe.type);
+        // Match by id; for blank-id events fall back to name+type
+        let idx=events.findIndex(e=>e.id===fe.id);
+        if(idx<0 && fe.name) idx=events.findIndex(e=>e.__noSheetId&&e.name===fe.name&&e.type===fe.type);
         if(idx>=0){
           Object.assign(events[idx],fe);
         } else {
@@ -1711,7 +1478,6 @@ async function saveEvent(){
       await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"addEvent",event:{id:newId,name,type,openDT,closeDT,statusOverride,desc,showUpcoming}})});
     }
     showAdminStatus("eventsStatus",editingEventId?`✓ Event updated.`:`✓ Event "${name}" created.`,"ok");
-    if(statusOverride==="closed") saveStandingsSnapshot();
     renderEventsTable();renderEventDropdown();renderUpcomingEvents();
     closeEventModal();
   }catch(e){showModalStatus(st,"Failed to save.","err");}
@@ -1720,31 +1486,15 @@ async function saveEvent(){
 
 function editEvent(id){openEventModal(id);}
 
-// Save a standings snapshot for all tabs to localStorage so rank-change arrows
-// reflect movement since the last event closed, on any device.
-function saveStandingsSnapshot(){
-  try{
-    const totals=computeStandings();
-    const snap={};
-    ["all","intramural","student","athletic"].forEach(tab=>{
-      const sorted=[...programs].sort((a,b)=>totalFor(totals,b,tab)-totalFor(totals,a,tab));
-      snap[tab]={};
-      sorted.forEach((prog,i)=>snap[tab][prog]=i+1);
-    });
-    localStorage.setItem("tplRankSnap",JSON.stringify(snap));
-    localStorage.setItem("tplRankSnapTime",Date.now().toString());
-  }catch(_){}
-}
-
 async function forceStatus(id,newStatus){
   const ev=events.find(e=>e.id===id);
   if(!ev) return;
   ev.statusOverride=newStatus;
   try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"updateEvent",event:{...ev}})});
+    if(!ev.__noSheetId){
+      await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"updateEvent",event:{...ev}})});
+    }
     showAdminStatus("eventsStatus",`✓ "${ev.name}" is now ${newStatus}.`,"ok");
-    // Snapshot standings when an event is closed so arrows update for all viewers
-    if(newStatus==="closed") saveStandingsSnapshot();
     renderEventsTable();renderEventDropdown();renderUpcomingEvents();
   }catch(e){showAdminStatus("eventsStatus","Failed to update.","err");}
 }
@@ -1755,8 +1505,13 @@ async function deleteEvent(id){
   if(!ev||!confirm(`Delete event "${ev.name}"? This won't remove existing attendance entries.`))return;
   events=events.filter(e=>e.id!==id);
   try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"deleteEvent",id})});
-    showAdminStatus("eventsStatus","✓ Event deleted.","ok");
+    if(ev.__noSheetId){
+      // Event has no real sheet id — can't delete from sheet; just remove locally
+      showAdminStatus("eventsStatus","✓ Event removed. (Tip: add an id in column A of the sheet to enable sheet-side deletes.)","ok");
+    } else {
+      await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"deleteEvent",id})});
+      showAdminStatus("eventsStatus","✓ Event deleted.","ok");
+    }
     renderEventsTable();renderEventDropdown();renderUpcomingEvents();
   }catch(e){showAdminStatus("eventsStatus","Failed to delete.","err");}
 }
@@ -1893,14 +1648,9 @@ function rebuildProgramSelect(){
 }
 rebuildProgramSelect();
 function renderAdminProgList(){
-  document.getElementById("adminProgList").innerHTML=programs.map((p,i)=>{
-    const sz=programSizes[p]||"";
-    return `
+  document.getElementById("adminProgList").innerHTML=programs.map((p,i)=>`
     <div class="prog-item">
-      <div class="prog-item-name" style="flex:1;">${p}</div>
-      <input type="number" min="1" max="999" placeholder="# students" title="Class size for participation % view"
-        value="${sz}" style="width:90px;padding:4px 6px;font-size:12px;border-radius:5px;border:1px solid var(--border2);background:var(--bg4);color:var(--text);"
-        onchange="setProgSize(${i},this.value)" />
+      <div class="prog-item-name">${p}</div>
       <button class="btn btn-ghost btn-sm" onclick="startRename(${i})">Rename</button>
       <button class="btn btn-danger btn-sm" onclick="deleteProg(${i})">Remove</button>
     </div>
@@ -1910,29 +1660,18 @@ function renderAdminProgList(){
         <button class="btn btn-gold btn-sm" onclick="saveRename(${i})">Save</button>
         <button class="btn btn-ghost btn-sm" onclick="cancelRename(${i})">Cancel</button>
       </div>
-    </div>`;
-  }).join("");
-}
-function setProgSize(i,val){
-  const name=programs[i];
-  const n=parseInt(val)||0;
-  if(n>0)programSizes[name]=n; else delete programSizes[name];
-  savePrograms();
-  renderLeaderboard();
+    </div>`
+  ).join("");
 }
 function startRename(i){document.getElementById("progedit-"+i).style.display="block";document.getElementById("proginput-"+i).focus();}
 function cancelRename(i){document.getElementById("progedit-"+i).style.display="none";}
 function saveRename(i){
-  const oldName=programs[i];
   const val=document.getElementById("proginput-"+i).value.trim();if(!val)return;
-  // carry size to new name
-  if(programSizes[oldName]){programSizes[val]=programSizes[oldName];delete programSizes[oldName];}
   programs[i]=val;renderAdminProgList();rebuildProgramSelect();rebuildAdminSelects();savePrograms();
   showAdminStatus("programsStatus",`✓ Renamed to "${val}".`,"ok");
 }
 function deleteProg(i){
   if(!confirm(`Remove "${programs[i]}"?`))return;
-  delete programSizes[programs[i]];
   programs.splice(i,1);renderAdminProgList();rebuildProgramSelect();rebuildAdminSelects();savePrograms();
   showAdminStatus("programsStatus","✓ Program removed.","ok");
 }
@@ -1949,9 +1688,7 @@ function addProgram(){
 ══════════════════════════════════════════ */
 async function savePrograms(){
   try{
-    // Send programs as array of {name, size} objects so the sheet stores sizes
-    const payload=programs.map(p=>({name:p,size:programSizes[p]||0}));
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"savePrograms",programs:payload})});
+    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"savePrograms",programs})});
     showAdminStatus("programsStatus","✓ Programs saved.","ok");
   }catch(e){
     showAdminStatus("programsStatus","Saved locally but failed to sync to sheet.","err");
@@ -1965,403 +1702,6 @@ function saveSeason(){
   const val=document.getElementById("seasonInput").value.trim();if(!val)return;
   SEASON_LABEL=val;document.getElementById("seasonBadge").textContent="★ "+SEASON_LABEL;
   showAdminStatus("settingsStatus","✓ Season label updated.","ok");
-}
-
-/* ── AUTO-FILL ROLLOVER SEASON LABEL ── */
-function prefillRolloverSeason(){
-  const now=new Date();
-  const y=now.getFullYear();
-  // Academic year: Aug–Dec = current/next, Jan–Jul = prev/current
-  const startYear=now.getMonth()>=7?y:y-1;
-  const label=`${startYear}–${startYear+1} Season`;
-  // Suggest NEXT year
-  const nextStart=startYear+1;
-  document.getElementById("rolloverSeasonInput").value=`${nextStart}–${nextStart+1} Season`;
-}
-
-/* ── SEASON ROLLOVER ── */
-async function doSeasonRollover(){
-  const confirmVal=document.getElementById("rolloverConfirm").value.trim();
-  if(confirmVal!=="ROLLOVER"){
-    showAdminStatus("rolloverStatus","Type ROLLOVER in the confirmation box to proceed.","error");
-    return;
-  }
-  const newLabel=document.getElementById("rolloverSeasonInput").value.trim();
-  if(!newLabel){
-    showAdminStatus("rolloverStatus","Enter a label for the new season.","error");
-    return;
-  }
-  showAdminStatus("rolloverStatus","⏳ Archiving season data…","ok");
-  try{
-    const res=await fetch(API,{method:"POST",body:JSON.stringify({
-      _token:API_SECRET,
-      action:"rolloverSeason",
-      archiveLabel:SEASON_LABEL,
-      newSeasonLabel:newLabel
-    })});
-    const json=await res.json();
-    if(json.ok){
-      SEASON_LABEL=newLabel;
-      document.getElementById("seasonBadge").textContent="★ "+SEASON_LABEL;
-      document.getElementById("seasonInput").value=newLabel;
-      document.getElementById("rolloverConfirm").value="";
-      allData=[];
-      renderLeaderboard();
-      showAdminStatus("rolloverStatus",`✓ Season archived as "${json.archiveSheet}". New season "${newLabel}" is live!`,"ok");
-    } else {
-      showAdminStatus("rolloverStatus","Error: "+(json.error||"Unknown error"),"error");
-    }
-  }catch(e){
-    showAdminStatus("rolloverStatus","Could not reach server. Check connection.","error");
-  }
-}
-
-/* ── ARCHIVES VIEWER ── */
-async function loadArchives(){
-  document.getElementById("archivesList").innerHTML=`<p style="color:var(--text3);font-size:13px;">Loading…</p>`;
-  try{
-    const res=await fetch(API+"?action=getArchives&_token="+API_SECRET);
-    const json=await res.json();
-    if(!json.ok||!json.archives||!json.archives.length){
-      document.getElementById("archivesList").innerHTML=`<p style="color:var(--text3);font-size:13px;">No archived seasons yet. Roll over at the end of a season to create an archive.</p>`;
-      return;
-    }
-    document.getElementById("archivesList").innerHTML=json.archives.map(a=>`
-      <div class="setting-card" style="margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-          <h4 style="margin:0;">${a.label}</h4>
-          <span style="font-size:11px;color:var(--text3);">${a.rows} attendance records · archived ${a.archivedOn}</span>
-        </div>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;font-size:12px;">
-            <thead><tr style="color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-size:10px;">
-              <th style="text-align:left;padding:4px 8px;border-bottom:1px solid var(--border);">Program</th>
-              <th style="text-align:right;padding:4px 8px;border-bottom:1px solid var(--border);">Points</th>
-              <th style="text-align:right;padding:4px 8px;border-bottom:1px solid var(--border);">Intramural</th>
-              <th style="text-align:right;padding:4px 8px;border-bottom:1px solid var(--border);">Student Life</th>
-              <th style="text-align:right;padding:4px 8px;border-bottom:1px solid var(--border);">Athletic</th>
-            </tr></thead>
-            <tbody>${buildArchiveRows(a.data)}</tbody>
-          </table>
-        </div>
-      </div>`).join("");
-  }catch(e){
-    document.getElementById("archivesList").innerHTML=`<p style="color:#e05555;font-size:13px;">Could not load archives. Check connection.</p>`;
-  }
-}
-
-function buildArchiveRows(data){
-  // Tally points by program from raw attendance rows
-  const tally={};
-  (data||[]).forEach(row=>{
-    const prog=row["Program"]||row["program"]||"Unknown";
-    const type=(row["EventType"]||row["eventType"]||"").toLowerCase();
-    if(!tally[prog])tally[prog]={intramural:0,student:0,athletic:0};
-    if(type==="intramural")tally[prog].intramural++;
-    else if(type==="athletic")tally[prog].athletic++;
-    else tally[prog].student++;
-  });
-  const sorted=Object.entries(tally).map(([prog,t])=>({prog,total:t.intramural+t.student+t.athletic,...t}))
-    .sort((a,b)=>b.total-a.total);
-  if(!sorted.length)return`<tr><td colspan="5" style="text-align:center;padding:1rem;color:var(--text3);">No data</td></tr>`;
-  return sorted.map((r,i)=>`<tr style="${i%2===0?"":"background:var(--bg3)"}">
-    <td style="padding:5px 8px;font-weight:600;">${r.prog}</td>
-    <td style="padding:5px 8px;text-align:right;font-weight:800;color:var(--gold);">${r.total}</td>
-    <td style="padding:5px 8px;text-align:right;color:var(--text2);">${r.intramural}</td>
-    <td style="padding:5px 8px;text-align:right;color:var(--text2);">${r.student}</td>
-    <td style="padding:5px 8px;text-align:right;color:var(--text2);">${r.athletic}</td>
-  </tr>`).join("");
-}
-
-/* ── BRANDING ── */
-const BRANDING_KEY="tplBranding";
-const BRANDING_DEFAULTS={logo:"🐯",logoIsImage:false,school:"Fort Hays Tech | Northwest — Goodland, KS",title:"Tiger Pride",gold:"#fbbe00",crimson:"#8b0e04",fontDisplay:"Barlow Condensed",fontBody:"Barlow",iconIntramural:"⚽",iconStudent:"🎉",iconAthletic:"🏟"};
-
-async function loadBranding(){
-  try{
-    const res=await fetch(API+"?action=getBranding&_token="+API_SECRET);
-    const json=await res.json();
-    if(json.ok && json.branding){
-      try{localStorage.setItem(BRANDING_KEY,JSON.stringify(json.branding));}catch(_){}
-    }
-  }catch(_){}
-  applyBranding();
-}
-
-function applyBranding(){
-  let b=BRANDING_DEFAULTS;
-  try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},BRANDING_DEFAULTS,JSON.parse(s));}catch(_){}
-  // Load Google Fonts if changed from defaults
-  loadGoogleFont(b.fontDisplay||BRANDING_DEFAULTS.fontDisplay);
-  loadGoogleFont(b.fontBody||BRANDING_DEFAULTS.fontBody);
-  // Apply font CSS vars
-  document.documentElement.style.setProperty("--font-display",(b.fontDisplay||BRANDING_DEFAULTS.fontDisplay)+", 'Barlow Condensed', sans-serif");
-  document.documentElement.style.setProperty("--font-body",(b.fontBody||BRANDING_DEFAULTS.fontBody)+", 'Barlow', sans-serif");
-  // Apply CSS vars
-  document.documentElement.style.setProperty("--gold",b.gold);
-  document.documentElement.style.setProperty("--crimson",b.crimson);
-  document.documentElement.style.setProperty("--gold-dim",hexAlpha(b.gold,0.12));
-  document.documentElement.style.setProperty("--gold-dim2",hexAlpha(b.gold,0.22));
-  document.documentElement.style.setProperty("--crimson-light",hexAlpha(b.crimson,0.18));
-  // Apply logo
-  document.querySelectorAll(".paw").forEach(el=>{
-    if(b.logoIsImage && b.logo){
-      el.innerHTML=`<img src="${b.logo}" style="width:100%;height:100%;object-fit:contain;border-radius:4px;pointer-events:none;" />`;
-    } else {
-      el.textContent=b.logo||"🐯";
-    }
-  });
-  // Update preview in admin panel
-  const prev=document.getElementById("branding-logo-preview");
-  if(prev){
-    if(b.logoIsImage && b.logo){
-      prev.innerHTML=`<img src="${b.logo}" style="width:100%;height:100%;object-fit:contain;" />`;
-    } else {
-      prev.textContent=b.logo||"🐯";
-    }
-  }
-  document.querySelectorAll(".school-name").forEach(el=>el.textContent=b.school);
-  document.querySelectorAll(".tracker-name").forEach(el=>{
-    // keep the second word (Leaderboard / Admin / Login) in the <span>
-    const span=el.querySelector("span");
-    const second=span?span.textContent:"";
-    el.innerHTML=b.title+(second?` <span>${second}</span>`:"");
-  });
-  // Icon slot previews & labels
-  ["intramural","student","athletic"].forEach(function(which){
-    const key="icon"+which.charAt(0).toUpperCase()+which.slice(1);
-    const val=b[key]||BRANDING_DEFAULTS[key];
-    const prev=document.getElementById("icon-preview-"+which);
-    if(prev)prev.innerHTML=renderIcon(val);
-    const lbl=document.getElementById("icon-label-"+which);
-    if(lbl){const match=ICON_LIST.find(function(i){return i.v===val;});lbl.textContent=match?match.l:val;}
-  });
-  const fdEl=document.getElementById("branding-font-display"); if(fdEl)fdEl.value=(b.fontDisplay===BRANDING_DEFAULTS.fontDisplay?"":b.fontDisplay)||"";
-  const fbEl=document.getElementById("branding-font-body");    if(fbEl)fbEl.value=(b.fontBody===BRANDING_DEFAULTS.fontBody?"":b.fontBody)||"";
-  const sEl=document.getElementById("branding-school");   if(sEl)sEl.value=b.school;
-  const tEl=document.getElementById("branding-title");    if(tEl)tEl.value=b.title;
-  const gEl=document.getElementById("branding-gold");     if(gEl)gEl.value=b.gold;
-  const ghEl=document.getElementById("branding-gold-hex");if(ghEl)ghEl.value=b.gold;
-  const cEl=document.getElementById("branding-crimson");  if(cEl)cEl.value=b.crimson;
-  const chEl=document.getElementById("branding-crimson-hex");if(chEl)chEl.value=b.crimson;
-}
-
-async function saveBranding(){
-  let existing={...BRANDING_DEFAULTS};
-  try{const s=localStorage.getItem(BRANDING_KEY);if(s)existing=Object.assign({},existing,JSON.parse(s));}catch(_){}
-  const b={
-    logo:        existing.logo,
-    logoIsImage: existing.logoIsImage||false,
-    school:      (document.getElementById("branding-school").value.trim()||BRANDING_DEFAULTS.school),
-    title:       (document.getElementById("branding-title").value.trim()||BRANDING_DEFAULTS.title),
-    fontDisplay:     (document.getElementById("branding-font-display").value.trim()||BRANDING_DEFAULTS.fontDisplay),
-    fontBody:        (document.getElementById("branding-font-body").value.trim()||BRANDING_DEFAULTS.fontBody),
-    iconIntramural:  existing.iconIntramural||BRANDING_DEFAULTS.iconIntramural,
-    iconStudent:     existing.iconStudent||BRANDING_DEFAULTS.iconStudent,
-    iconAthletic:    existing.iconAthletic||BRANDING_DEFAULTS.iconAthletic,
-    gold:        (document.getElementById("branding-gold").value||BRANDING_DEFAULTS.gold),
-    crimson:     (document.getElementById("branding-crimson").value||BRANDING_DEFAULTS.crimson)
-  };
-  try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
-  applyBranding();
-  showAdminStatus("brandingStatus","⏳ Saving…","ok");
-  try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveBranding",branding:b})});
-    showAdminStatus("brandingStatus","✓ Appearance saved for everyone.","ok");
-  }catch(e){
-    showAdminStatus("brandingStatus","✓ Saved locally — could not reach server.","ok");
-  }
-}
-
-function handleLogoUpload(input){
-  const file=input.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=async function(e){
-    const dataUrl=e.target.result;
-    let b={...BRANDING_DEFAULTS};
-    try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
-    b.logo=dataUrl;
-    b.logoIsImage=true;
-    try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
-    applyBranding();
-    showAdminStatus("brandingStatus","⏳ Uploading logo…","ok");
-    try{
-      await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveBranding",branding:b})});
-      showAdminStatus("brandingStatus","✓ Logo saved for everyone.","ok");
-    }catch(e){
-      showAdminStatus("brandingStatus","✓ Logo saved locally — could not reach server.","ok");
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-async function clearLogo(){
-  let b={...BRANDING_DEFAULTS};
-  try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
-  b.logo="🐯";
-  b.logoIsImage=false;
-  try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
-  applyBranding();
-  try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"saveBranding",branding:b})});
-    showAdminStatus("brandingStatus","✓ Reset to emoji for everyone.","ok");
-  }catch(e){
-    showAdminStatus("brandingStatus","✓ Reset locally — could not reach server.","ok");
-  }
-}
-
-function resetBranding(){
-  if(!confirm("Reset appearance to defaults?"))return;
-  try{localStorage.removeItem(BRANDING_KEY);}catch(_){}
-  applyBranding();
-  showAdminStatus("brandingStatus","✓ Reset to defaults.","ok");
-}
-
-// Keep color picker and hex field in sync
-function syncColorFromHex(which){
-  const hex=document.getElementById("branding-"+which+"-hex").value.trim();
-  if(/^#[0-9a-fA-F]{6}$/.test(hex)) document.getElementById("branding-"+which).value=hex;
-}
-
-// Also sync hex field when color picker changes
-document.addEventListener("input",function(e){
-  if(e.target.id==="branding-gold")    document.getElementById("branding-gold-hex").value=e.target.value;
-  if(e.target.id==="branding-crimson") document.getElementById("branding-crimson-hex").value=e.target.value;
-});
-
-/* ── ICON PICKER ── */
-const ICON_LIST=[
-  // Sports
-  {v:"sports_soccer",l:"Soccer"},{v:"sports_basketball",l:"Basketball"},{v:"sports_football",l:"Football"},
-  {v:"sports_baseball",l:"Baseball"},{v:"sports_volleyball",l:"Volleyball"},{v:"sports_tennis",l:"Tennis"},
-  {v:"sports_golf",l:"Golf"},{v:"sports_hockey",l:"Hockey"},{v:"sports_rugby",l:"Rugby"},
-  {v:"sports_cricket",l:"Cricket"},{v:"sports_kabaddi",l:"Kabaddi"},{v:"sports_mma",l:"MMA"},
-  {v:"sports_motorsports",l:"Motorsports"},{v:"sports_esports",l:"Esports"},{v:"sports_gymnastics",l:"Gymnastics"},
-  {v:"sports_handball",l:"Handball"},{v:"sports_martial_arts",l:"Martial Arts"},
-  // Fitness & Activity
-  {v:"fitness_center",l:"Gym"},{v:"directions_run",l:"Running"},{v:"directions_bike",l:"Biking"},
-  {v:"pool",l:"Swimming"},{v:"hiking",l:"Hiking"},{v:"rowing",l:"Rowing"},
-  {v:"self_improvement",l:"Yoga"},{v:"skateboarding",l:"Skateboarding"},{v:"surfing",l:"Surfing"},
-  {v:"sledding",l:"Sledding"},{v:"snowboarding",l:"Snowboarding"},{v:"downhill_skiing",l:"Skiing"},
-  // Awards & Events
-  {v:"emoji_events",l:"Trophy"},{v:"military_tech",l:"Medal"},{v:"workspace_premium",l:"Premium"},
-  {v:"star",l:"Star"},{v:"grade",l:"Star Badge"},{v:"local_activity",l:"Ticket"},
-  {v:"celebration",l:"Celebration"},{v:"festival",l:"Festival"},{v:"event",l:"Event"},
-  {v:"stadium",l:"Stadium"},{v:"scoreboard",l:"Scoreboard"},{v:"leaderboard",l:"Leaderboard"},
-  // School & Community
-  {v:"school",l:"School"},{v:"groups",l:"Groups"},{v:"people",l:"People"},
-  {v:"diversity_3",l:"Diversity"},{v:"volunteer_activism",l:"Volunteer"},{v:"handshake",l:"Handshake"},
-  {v:"campaign",l:"Campaign"},{v:"record_voice_over",l:"Speaker"},{v:"music_note",l:"Music"},
-  {v:"theater_comedy",l:"Theater"},{v:"palette",l:"Art"},{v:"science",l:"Science"},
-  {v:"biotech",l:"Lab"},{v:"computer",l:"Tech"},{v:"agriculture",l:"Agriculture"},
-  {v:"construction",l:"Construction"},{v:"engineering",l:"Engineering"},{v:"health_and_safety",l:"Health"},
-  {v:"local_hospital",l:"Medical"},{v:"pets",l:"Pets"},{v:"nature",l:"Nature"},
-  // Emojis
-  {v:"⚽",l:"Soccer Ball",emoji:true},{v:"🏀",l:"Basketball",emoji:true},{v:"🏈",l:"Football",emoji:true},
-  {v:"⚾",l:"Baseball",emoji:true},{v:"🎾",l:"Tennis",emoji:true},{v:"🏐",l:"Volleyball",emoji:true},
-  {v:"🏒",l:"Hockey",emoji:true},{v:"🥊",l:"Boxing",emoji:true},{v:"🤼",l:"Wrestling",emoji:true},
-  {v:"🏆",l:"Trophy",emoji:true},{v:"🥇",l:"Gold Medal",emoji:true},{v:"🎖",l:"Medal",emoji:true},
-  {v:"⭐",l:"Star",emoji:true},{v:"🌟",l:"Glowing Star",emoji:true},{v:"🎉",l:"Party",emoji:true},
-  {v:"🎊",l:"Confetti",emoji:true},{v:"🎓",l:"Graduation",emoji:true},{v:"📚",l:"Books",emoji:true},
-  {v:"🎨",l:"Art",emoji:true},{v:"🎵",l:"Music",emoji:true},{v:"🎭",l:"Theater",emoji:true},
-  {v:"🏟",l:"Stadium",emoji:true},{v:"🏃",l:"Running",emoji:true},{v:"🚴",l:"Cycling",emoji:true},
-  {v:"🏊",l:"Swimming",emoji:true},{v:"🤸",l:"Gymnastics",emoji:true},{v:"⛷",l:"Skiing",emoji:true},
-  {v:"🌱",l:"Nature",emoji:true},{v:"🤝",l:"Handshake",emoji:true},{v:"❤️",l:"Heart",emoji:true},
-];
-
-let _iconPickerTarget=null;
-let _iconPickerFiltered=ICON_LIST;
-
-function openIconPicker(which){
-  _iconPickerTarget=which;
-  document.getElementById("iconPickerTitle").textContent="Choose Icon — "+{intramural:"Intramural",student:"Student Life",athletic:"Athletic"}[which];
-  document.getElementById("iconSearchInput").value="";
-  _iconPickerFiltered=ICON_LIST;
-  renderIconGrid();
-  const modal=document.getElementById("iconPickerModal");
-  modal.style.display="flex";
-  setTimeout(()=>document.getElementById("iconSearchInput").focus(),50);
-}
-
-function closeIconPicker(){
-  document.getElementById("iconPickerModal").style.display="none";
-  _iconPickerTarget=null;
-}
-
-function filterIcons(){
-  const q=document.getElementById("iconSearchInput").value.toLowerCase().trim();
-  _iconPickerFiltered=q?ICON_LIST.filter(i=>i.l.toLowerCase().includes(q)||i.v.toLowerCase().includes(q)):ICON_LIST;
-  renderIconGrid();
-}
-
-function renderIconGrid(){
-  const grid=document.getElementById("iconGrid");
-  grid.innerHTML=_iconPickerFiltered.map(i=>{
-    const display=i.emoji?`<span style="font-size:1.6rem;line-height:1;">${i.v}</span>`
-      :`<span class="material-symbols-rounded" style="font-size:1.6rem;">${i.v}</span>`;
-    return`<button class="icon-btn" onclick="selectIcon('${i.v.replace(/'/g,"\\'")}','${i.l.replace(/'/g,"\\'")}',${!!i.emoji})" title="${i.l}">${display}<span class="lbl">${i.l}</span></button>`;
-  }).join("");
-}
-
-function selectIcon(val,label,isEmoji){
-  if(!_iconPickerTarget)return;
-  const which=_iconPickerTarget;
-  // Update preview
-  const prev=document.getElementById("icon-preview-"+which);
-  if(prev)prev.innerHTML=renderIcon(val);
-  const lbl=document.getElementById("icon-label-"+which);
-  if(lbl)lbl.textContent=label;
-  // Save immediately
-  let b={...BRANDING_DEFAULTS};
-  try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
-  b["icon"+which.charAt(0).toUpperCase()+which.slice(1)]=val;
-  try{localStorage.setItem(BRANDING_KEY,JSON.stringify(b));}catch(_){}
-  closeIconPicker();
-  showAdminStatus("brandingStatus","✓ Icon updated — click Save Appearance to keep all changes.","ok");
-}
-
-// Close modal on backdrop click
-document.addEventListener("click",function(e){
-  const modal=document.getElementById("iconPickerModal");
-  if(modal && e.target===modal) closeIconPicker();
-});
-
-// Returns HTML for an icon — Material Symbol name or emoji
-function renderIcon(val){
-  if(!val)return"";
-  // If it looks like an emoji or short symbol (contains non-ascii or is <=2 chars after trim)
-  if(/\p{Emoji}/u.test(val)) return val;
-  // Otherwise treat as Material Symbol ligature name
-  return`<span class="material-symbols-rounded" style="font-size:1.2em;vertical-align:middle;">${val}</span>`;
-}
-
-function getIcons(){
-  let b=BRANDING_DEFAULTS;
-  try{const s=localStorage.getItem(BRANDING_KEY);if(s)b=Object.assign({},b,JSON.parse(s));}catch(_){}
-  return{intramural:b.iconIntramural||BRANDING_DEFAULTS.iconIntramural,student:b.iconStudent||BRANDING_DEFAULTS.iconStudent,athletic:b.iconAthletic||BRANDING_DEFAULTS.iconAthletic};
-}
-
-function previewIcon(which){
-  const val=document.getElementById("branding-icon-"+which).value.trim();
-  const el=document.getElementById("icon-preview-"+which);
-  if(el)el.innerHTML=renderIcon(val||BRANDING_DEFAULTS["icon"+which.charAt(0).toUpperCase()+which.slice(1)]);
-}
-
-function loadGoogleFont(fontName){
-  if(!fontName)return;
-  const id="gf-"+fontName.replace(/\s+/g,"-").toLowerCase();
-  if(document.getElementById(id))return; // already loaded
-  const link=document.createElement("link");
-  link.id=id;
-  link.rel="stylesheet";
-  link.href="https://fonts.googleapis.com/css2?family="+encodeURIComponent(fontName)+":wght@400;500;600;700;800;900&display=swap";
-  document.head.appendChild(link);
-}
-
-function hexAlpha(hex,alpha){
-  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
-  return `rgba(${r},${g},${b},${alpha})`;
 }
 async function changePassword(){
   const p1 = document.getElementById("newPw1").value;
@@ -2540,7 +1880,7 @@ function toggleTheme() {
 /* ══════════════════════════════════════════
    INIT — auto-refresh every 60s, re-evaluate event statuses every 30s
 ══════════════════════════════════════════ */
-loadBranding().then(()=>loadData()).then(()=>handleQRCheckin());
+loadData().then(() => handleQRCheckin());
 setInterval(loadData,60000);
 // Re-evaluate scheduled open/close without a full reload
 setInterval(()=>{renderEventDropdown();renderUpcomingEvents();if(isAdmin)renderEventsTable();},30000);
