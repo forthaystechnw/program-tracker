@@ -511,8 +511,9 @@ td.muted { color:var(--text2); font-size:12px; }
       <div class="panel">
         <div class="panel-header">
           <h2>Program Standings</h2>
-          <div style="display:flex;align-items:center;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
             <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+            <button class="refresh-btn" id="lbModeBtn" onclick="toggleLbMode()" title="Switch between total points and participation rate">📊 Points</button>
             <div class="tabs">
               <button class="tab active" onclick="setTab('all',this)">All</button>
               <button class="tab" onclick="setTab('intramural',this)">Intramural</button>
@@ -521,6 +522,7 @@ td.muted { color:var(--text2); font-size:12px; }
             </div>
           </div>
         </div>
+        <div id="lbModeNote" style="display:none;padding:6px 1.25rem 0;font-size:11px;color:var(--text2);font-style:italic;">Ranked by % of class attending — higher means more of the program is showing up</div>
         <div class="leaderboard" id="leaderboard"><div class="empty-state">Loading standings…</div></div>
       </div>
     </div>
@@ -649,6 +651,7 @@ td.muted { color:var(--text2); font-size:12px; }
         <!-- PROGRAMS -->
         <div class="admin-section" id="sec-programs">
           <div class="section-label">Manage Programs</div>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.6;">Set class size to enable the % Rate view on the leaderboard. Class sizes are only visible here — students just see the ranking order.</p>
           <div class="status-msg" id="programsStatus"></div>
           <div class="prog-list" id="adminProgList"></div>
           <div class="add-row">
@@ -727,7 +730,7 @@ td.muted { color:var(--text2); font-size:12px; }
           <input type="time" id="ev-close-time" value="23:59" />
         </div>
       </div>
-      <p class="schedule-note">Leave blank to control the status manually. Times are your local time (Central).</p>
+      <p class="schedule-note">Leave blank to control the status manually. Times are your local time (Central). Events open 1 hour early and stay open 1 hour after close time.</p>
     </div>
 
     <div class="form-group" style="margin-top:10px;">
@@ -825,6 +828,8 @@ const TYPE_DOT = { intramural:"#fbbe00", student:"#4A8CF7", athletic:"#c01510" }
 let allData  = [];
 let events   = [];
 let programs = [...DEFAULT_PROGRAMS];
+let programSizes = {}; // { "Cosmetology": 8, ... } — class sizes for % rate view
+let lbMode   = "points"; // "points" or "rate"
 let currentTab = "all";
 let isAdmin    = false;
 let editingEventId = null;
@@ -1059,9 +1064,19 @@ async function loadData(){
       }
     }
 
-    // Load programs from sheet if available
+    // Load programs from sheet — handle {name, size} objects
     if(json.programs && json.programs.length){
-      programs = json.programs;
+      if(typeof json.programs[0]==="object" && json.programs[0].name){
+        // New format: [{name, size}] objects
+        programs = json.programs.map(p=>p.name);
+        programSizes = {};
+        json.programs.forEach(p=>{
+          if(p.size && parseInt(p.size)>0) programSizes[p.name]=parseInt(p.size);
+        });
+      } else {
+        // Legacy format: plain strings
+        programs = json.programs;
+      }
       rebuildProgramSelect();
       rebuildAdminSelects();
     }
@@ -1136,6 +1151,24 @@ function showToast(type,msg){
 }
 
 /* ══════════════════════════════════════════
+   LEADERBOARD MODE TOGGLE
+══════════════════════════════════════════ */
+function toggleLbMode(){
+  lbMode=lbMode==="points"?"rate":"points";
+  const btn=document.getElementById("lbModeBtn");
+  const note=document.getElementById("lbModeNote");
+  if(btn) btn.textContent=lbMode==="rate"?"📊 Points":"📊 % Rate";
+  if(note) note.style.display=lbMode==="rate"?"block":"none";
+  renderLeaderboard();
+}
+// Returns participation rate (points / class size) or null if no size set
+function getRate(pts,prog){
+  const size=programSizes[prog]||0;
+  if(!size) return null;
+  return Math.round((pts/size)*100);
+}
+
+/* ══════════════════════════════════════════
    LEADERBOARD
 ══════════════════════════════════════════ */
 function computeStandings(){
@@ -1158,7 +1191,18 @@ function setTab(tab,btn){
 }
 function renderLeaderboard(){
   const totals=computeStandings();
-  const sorted=[...programs].sort((a,b)=>totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab));
+  // Sort by rate or points
+  const sorted=[...programs].sort((a,b)=>{
+    if(lbMode==="rate"){
+      const ptsA=totalFor(totals,a,currentTab),ptsB=totalFor(totals,b,currentTab);
+      const rA=getRate(ptsA,a),rB=getRate(ptsB,b);
+      if(rA===null&&rB===null) return ptsB-ptsA;
+      if(rA===null) return 1;
+      if(rB===null) return -1;
+      return rB-rA;
+    }
+    return totalFor(totals,b,currentTab)-totalFor(totals,a,currentTab);
+  });
   const maxPts=Math.max(1,totalFor(totals,sorted[0],currentTab));
   const lb=document.getElementById("leaderboard");
   if(maxPts===0){lb.innerHTML='<div class="empty-state">No attendance logged yet — fire it up, Tigers!</div>';updateStats(totals,sorted);return;}
@@ -1169,6 +1213,11 @@ function renderLeaderboard(){
     const rowCls=i===0?"top1":i===1?"top2":i===2?"top3":"";
     const rankTxt=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
     const t=totals[prog];
+    // In rate mode show "ranked" text instead of a number
+    const rate=lbMode==="rate"?getRate(pts,prog):null;
+    const displayTxt=lbMode==="rate"
+      ?(rate!==null?`<span style="font-size:11px;color:var(--text2);font-style:italic;">ranked</span>`:"<span style='color:var(--text3)'>—</span>")
+      :pts.toLocaleString();
     return `<div class="prog-row ${rowCls}">
       <span class="rank ${rankCls}">${rankTxt}</span>
       <div class="prog-info">
@@ -1176,7 +1225,7 @@ function renderLeaderboard(){
         <div class="prog-breakdown">I: ${t.intramural} &nbsp;·&nbsp; S: ${t.student} &nbsp;·&nbsp; A: ${t.athletic}</div>
       </div>
       <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
-      <span class="pts-col">${pts.toLocaleString()}</span>
+      <span class="pts-col">${displayTxt}</span>
     </div>`;
   }).join("");
   updateStats(totals,sorted);
@@ -1349,6 +1398,12 @@ function renderEventsTable(){
   evList=evList.slice().sort((a,b)=>{
     if(sort==="name") return (a.name||"").localeCompare(b.name||"");
     if(sort==="entries") return allData.filter(r=>r["EventID"]===b.id).length - allData.filter(r=>r["EventID"]===a.id).length;
+    // Sort by live status first: open → scheduled → ended/closed
+    const rank={open:0,scheduled:1,ended:2,closed:2,unknown:3};
+    const ra=rank[liveStatus(a)]??3, rb=rank[liveStatus(b)]??3;
+    if(sort==="newest"||sort==="oldest"){
+      if(ra!==rb) return ra-rb;
+    }
     const dtA=a.openDT||a.closeDT||"";
     const dtB=b.openDT||b.closeDT||"";
     return sort==="oldest" ? dtA.localeCompare(dtB) : dtB.localeCompare(dtA);
@@ -1648,9 +1703,13 @@ function rebuildProgramSelect(){
 }
 rebuildProgramSelect();
 function renderAdminProgList(){
-  document.getElementById("adminProgList").innerHTML=programs.map((p,i)=>`
-    <div class="prog-item">
-      <div class="prog-item-name">${p}</div>
+  document.getElementById("adminProgList").innerHTML=programs.map((p,i)=>{
+    const sz=programSizes[p]||"";
+    return `<div class="prog-item">
+      <div class="prog-item-name" style="flex:1;">${p}</div>
+      <input type="number" min="1" max="999" placeholder="# students" title="Class size for participation % view"
+        value="${sz}" style="width:90px;padding:4px 6px;font-size:12px;border-radius:5px;border:1px solid var(--border2);background:var(--bg4);color:var(--text);"
+        onchange="setProgSize(${i},this.value)" />
       <button class="btn btn-ghost btn-sm" onclick="startRename(${i})">Rename</button>
       <button class="btn btn-danger btn-sm" onclick="deleteProg(${i})">Remove</button>
     </div>
@@ -1660,18 +1719,29 @@ function renderAdminProgList(){
         <button class="btn btn-gold btn-sm" onclick="saveRename(${i})">Save</button>
         <button class="btn btn-ghost btn-sm" onclick="cancelRename(${i})">Cancel</button>
       </div>
-    </div>`
-  ).join("");
+    </div>`;
+  }).join("");
+}
+function setProgSize(i,val){
+  const name=programs[i];
+  const n=parseInt(val)||0;
+  if(n>0) programSizes[name]=n; else delete programSizes[name];
+  savePrograms();
+  renderLeaderboard();
 }
 function startRename(i){document.getElementById("progedit-"+i).style.display="block";document.getElementById("proginput-"+i).focus();}
 function cancelRename(i){document.getElementById("progedit-"+i).style.display="none";}
 function saveRename(i){
   const val=document.getElementById("proginput-"+i).value.trim();if(!val)return;
+  const oldName=programs[i];
+  // Carry size to new name
+  if(programSizes[oldName]){programSizes[val]=programSizes[oldName];delete programSizes[oldName];}
   programs[i]=val;renderAdminProgList();rebuildProgramSelect();rebuildAdminSelects();savePrograms();
   showAdminStatus("programsStatus",`✓ Renamed to "${val}".`,"ok");
 }
 function deleteProg(i){
   if(!confirm(`Remove "${programs[i]}"?`))return;
+  delete programSizes[programs[i]];
   programs.splice(i,1);renderAdminProgList();rebuildProgramSelect();rebuildAdminSelects();savePrograms();
   showAdminStatus("programsStatus","✓ Program removed.","ok");
 }
@@ -1684,11 +1754,12 @@ function addProgram(){
 }
 
 /* ══════════════════════════════════════════
-   SAVE PROGRAMS
+   SAVE PROGRAMS — sends {name, size} objects
 ══════════════════════════════════════════ */
 async function savePrograms(){
   try{
-    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"savePrograms",programs})});
+    const payload=programs.map(p=>({name:p,size:programSizes[p]||0}));
+    await fetch(API,{method:"POST",body:JSON.stringify({_token:API_SECRET,action:"savePrograms",programs:payload})});
     showAdminStatus("programsStatus","✓ Programs saved.","ok");
   }catch(e){
     showAdminStatus("programsStatus","Saved locally but failed to sync to sheet.","err");
