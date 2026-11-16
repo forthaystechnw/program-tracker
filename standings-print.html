@@ -207,7 +207,13 @@ async function loadData() {
     var res  = await fetch(API + '?action=getAll&_token=' + SECRET);
     var json = await res.json();
     allData  = json.data || [];
-    programs = (json.programs && json.programs.length) ? json.programs : [];
+    if (json.programs && json.programs.length) {
+      programs = (typeof json.programs[0] === 'object' && json.programs[0].name)
+        ? json.programs.map(function(p){ return p.name; })
+        : json.programs;
+    } else {
+      programs = [];
+    }
 
     var now = new Date().toLocaleDateString('en-US', {
       timeZone: 'America/Denver',
