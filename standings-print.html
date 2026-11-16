@@ -10,19 +10,22 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── THEME ── */
 :root {
+  --gold: #fbbe00;
+  --crimson: #8b0e04;
   --bg: #fff;
   --bg2: #f4f4f2;
+  --bg3: #eee;
   --text: #111;
   --text2: #555;
   --text3: #999;
-  --border: #eee;
+  --border: #e0e0e0;
   --bar-bg: #eee;
 }
 body.dark {
   --bg: #111;
   --bg2: #1a1a1a;
+  --bg3: #222;
   --text: #f5f5f5;
   --text2: #999;
   --text3: #555;
@@ -30,30 +33,57 @@ body.dark {
   --bar-bg: #2b2b2b;
 }
 
-body {
-  font-family: 'Barlow', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  transition: background .2s, color .2s;
-}
-
+body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background .2s, color .2s; }
 .page { max-width: 800px; margin: 0 auto; padding: 2rem; }
 
 /* ── HEADER ── */
-.stripe { background: #8b0e04; height: 6px; border-radius: 3px; margin-bottom: 1.25rem; }
-.header { text-align: center; border-bottom: 4px solid #fbbe00; padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
-.school { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #8b0e04; margin-bottom: 6px; }
+.stripe { background: var(--crimson); height: 6px; border-radius: 3px; margin-bottom: 1.25rem; }
+.header { text-align: center; border-bottom: 4px solid var(--gold); padding-bottom: 1.25rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.logo-mark { font-size: 2.4rem; line-height: 1; }
+.logo-mark img { width: 56px; height: 56px; object-fit: contain; border-radius: 6px; }
+.school { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--crimson); }
 .title { font-family: 'Barlow Condensed', sans-serif; font-size: 2.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: var(--text); line-height: 1; }
-.title span { color: #fbbe00; }
-.subtitle { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--text2); margin-top: 8px; }
-.date-line { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--text3); margin-top: 4px; letter-spacing: .08em; text-transform: uppercase; }
+.title span { color: var(--gold); }
+.subtitle { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--text2); }
+.date-line { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; }
+
+/* ── PODIUM ── */
+.podium-section { margin-bottom: 2rem; }
+.podium-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--text3); text-align: center; margin-bottom: 1rem; }
+.podium { display: flex; align-items: flex-end; justify-content: center; gap: 10px; height: 200px; }
+.podium-slot { display: flex; flex-direction: column; align-items: center; flex: 1; max-width: 220px; }
+.podium-name { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; text-align: center; line-height: 1.2; margin-bottom: 6px; padding: 0 4px; }
+.podium-pts { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 8px; opacity: .8; }
+.podium-medal { font-size: 2rem; margin-bottom: 4px; }
+.podium-block { width: 100%; border-radius: 6px 6px 0 0; display: flex; align-items: center; justify-content: center; }
+.podium-rank-num { font-family: 'Barlow Condensed', sans-serif; font-size: 3rem; font-weight: 900; color: rgba(255,255,255,0.3); }
+
+/* heights */
+.podium-slot.p1 .podium-block { height: 110px; background: var(--gold); }
+.podium-slot.p1 .podium-rank-num { color: rgba(0,0,0,0.15); }
+.podium-slot.p2 .podium-block { height: 80px; background: #c0c0c0; }
+.podium-slot.p3 .podium-block { height: 60px; background: #c97a4e; }
+
+body.dark .podium-slot.p2 .podium-block { background: #888; }
+body.dark .podium-slot.p3 .podium-block { background: #a0623a; }
+
+.podium-slot.p1 .podium-name { color: var(--gold); font-size: 15px; }
+.podium-slot.p2 .podium-name { color: var(--text); }
+.podium-slot.p3 .podium-name { color: var(--text); }
+.podium-slot.p1 .podium-pts { color: var(--gold); }
+
+/* reorder: 2nd left, 1st center, 3rd right */
+.podium { flex-direction: row; }
+.podium-slot { order: 2; }
+.podium-slot.p1 { order: 2; }
+.podium-slot.p2 { order: 1; }
+.podium-slot.p3 { order: 3; }
 
 /* ── TABS ── */
 .filter-tabs { display: flex; gap: 6px; justify-content: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
 .ftab { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 5px 14px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; transition: all .15s; }
 .ftab:hover { color: var(--text); }
-.ftab.active { background: #fbbe00; color: #111; border-color: #fbbe00; }
+.ftab.active { background: var(--gold); color: #111; border-color: var(--gold); }
 
 /* ── TABLE ── */
 table { width: 100%; border-collapse: collapse; }
@@ -64,37 +94,33 @@ td { padding: 9px 8px; vertical-align: middle; }
 .name { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--text); }
 .bar-cell { width: 35%; padding: 9px 12px; }
 .bar-bg { background: var(--bar-bg); border-radius: 3px; height: 8px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
-.pts { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: #fbbe00; width: 52px; text-align: right; }
+.bar-fill { height: 100%; border-radius: 3px; }
+.pts { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: var(--gold); width: 52px; text-align: right; }
 .breakdown { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: var(--text3); width: 96px; text-align: right; letter-spacing: .04em; }
 
 /* ── FOOTER ── */
 .footer { text-align: center; margin-top: 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); border-top: 1px solid var(--border); padding-top: 1rem; }
-.footer span { color: #fbbe00; }
+.footer span { color: var(--gold); }
 
 /* ── CONTROLS ── */
 .controls { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; }
 .ctrl-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; cursor: pointer; border-radius: 6px; padding: 9px 22px; border: 1px solid var(--border); background: var(--bg2); color: var(--text); transition: all .15s; }
 .ctrl-btn:hover { opacity: .85; }
-.ctrl-btn.gold { background: #fbbe00; color: #111; border-color: #fbbe00; }
+.ctrl-btn.gold { background: var(--gold); color: #111; border-color: var(--gold); }
 
 /* ── LOADING ── */
 .loading { text-align: center; padding: 4rem 2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); }
-.spinner { width: 28px; height: 28px; border: 3px solid var(--bar-bg); border-top-color: #fbbe00; border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 1rem; }
+.spinner { width: 28px; height: 28px; border: 3px solid var(--bar-bg); border-top-color: var(--gold); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 1rem; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── PRINT ── */
 @media print {
   .controls, .filter-tabs { display: none; }
-  body { padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .page { padding: 1rem; }
-  body.dark { background: #111 !important; color: #f5f5f5 !important; }
-  body.dark td, body.dark .name, body.dark .rank { color: #f5f5f5 !important; }
-  body.dark tr { border-bottom-color: #2a2a2a !important; }
-  body.dark .bar-bg { background: #2b2b2b !important; }
-  body.dark .footer, body.dark .subtitle, body.dark .date-line { color: #999 !important; }
-  body.dark .header { border-bottom-color: #fbbe00 !important; }
-  body.dark .breakdown { color: #555 !important; }
+  .podium-slot.p1 .podium-block { background: var(--gold) !important; }
+  .podium-slot.p2 .podium-block { background: #c0c0c0 !important; }
+  .podium-slot.p3 .podium-block { background: #c97a4e !important; }
 }
 </style>
 </head>
@@ -102,10 +128,17 @@ td { padding: 9px 8px; vertical-align: middle; }
 <div class="page">
   <div class="stripe"></div>
   <div class="header">
-    <div class="school">Fort Hays Tech | Northwest &mdash; Goodland, KS</div>
-    <div class="title">🐯 Tiger Pride <span>Standings</span></div>
+    <div class="logo-mark" id="logoMark">🐯</div>
+    <div class="school" id="schoolEl">Fort Hays Tech | Northwest — Goodland, KS</div>
+    <div class="title" id="titleEl">Tiger Pride <span>Standings</span></div>
     <div class="subtitle" id="subtitleEl">2026–2027 Season</div>
     <div class="date-line" id="dateEl"></div>
+  </div>
+
+  <!-- TOP 3 PODIUM -->
+  <div class="podium-section" id="podiumSection" style="display:none;">
+    <div class="podium-label">🏆 Top 3 Programs</div>
+    <div class="podium" id="podiumWrap"></div>
   </div>
 
   <div class="filter-tabs">
@@ -116,13 +149,10 @@ td { padding: 9px 8px; vertical-align: middle; }
   </div>
 
   <div id="tableWrap">
-    <div class="loading">
-      <div class="spinner"></div>
-      Loading standings…
-    </div>
+    <div class="loading"><div class="spinner"></div>Loading standings…</div>
   </div>
 
-  <div class="footer">fhnw.edu &nbsp;&middot;&nbsp; <span>Go Tigers!</span></div>
+  <div class="footer">fhnw.edu &nbsp;&middot;&nbsp; <span id="footerTitle">Go Tigers!</span></div>
 
   <div class="controls">
     <button class="ctrl-btn" onclick="toggleTheme()">🌙 Dark Mode</button>
@@ -133,12 +163,10 @@ td { padding: 9px 8px; vertical-align: middle; }
 <script>
 var API    = "https://script.google.com/macros/s/AKfycbyYQMh2fCVIeGZGo35g6lSxcwUzzCa-qZopaZB8E2uX8f0HjzVLhTYFwQcT4k-5kM9x/exec";
 var SECRET = "49c6bedd35d62d28cdf75082b5727cd4da864816e527b173";
-
+var BRANDING_DEFAULTS = { logo:"🐯", logoIsImage:false, school:"Fort Hays Tech | Northwest — Goodland, KS", title:"Tiger Pride", gold:"#fbbe00", crimson:"#8b0e04" };
 var COLORS = ['#fbbe00','#e8a800','#d49200','#f0a030','#e88c20','#c97a4e','#b86840','#a05530','#8b0e04','#a41208','#c01510','#d42515','#e03520','#ff6b60','#ff8870','#c09050','#d4aa60','#e8c470'];
 
-var allData  = [];
-var programs = [];
-var currentFilter = 'all';
+var allData = [], programs = [], currentFilter = 'all';
 
 function totalFor(totals, prog, tab) {
   if (tab === 'all') return totals[prog].intramural + totals[prog].student + totals[prog].athletic;
@@ -149,26 +177,39 @@ function computeStandings() {
   var totals = {};
   programs.forEach(function(p) { totals[p] = { intramural:0, student:0, athletic:0 }; });
   allData.forEach(function(row) {
-    var p = row.Program;
-    var t = (row.EventType || '').toLowerCase();
-    var n = parseInt(row.Attendees) || 0;
+    var p = row.Program, t = (row.EventType||'').toLowerCase(), n = parseInt(row.Attendees)||0;
     if (totals[p] && totals[p][t] !== undefined) totals[p][t] += n;
   });
   return totals;
 }
 
+function renderPodium(sorted, totals) {
+  if (sorted.length < 1) { document.getElementById('podiumSection').style.display='none'; return; }
+  document.getElementById('podiumSection').style.display='block';
+  var medals = ['🥇','🥈','🥉'];
+  var classes = ['p1','p2','p3'];
+  var html = '';
+  for (var i = 0; i < Math.min(3, sorted.length); i++) {
+    var prog = sorted[i];
+    var pts  = totalFor(totals, prog, currentFilter);
+    html += '<div class="podium-slot ' + classes[i] + '">'
+      + '<div class="podium-medal">' + medals[i] + '</div>'
+      + '<div class="podium-name">' + prog + '</div>'
+      + '<div class="podium-pts">' + pts.toLocaleString() + ' pts</div>'
+      + '<div class="podium-block"><span class="podium-rank-num">' + (i+1) + '</span></div>'
+      + '</div>';
+  }
+  document.getElementById('podiumWrap').innerHTML = html;
+}
+
 function renderTable() {
   var totals = computeStandings();
-  var sorted = programs.slice().sort(function(a, b) {
-    return totalFor(totals, b, currentFilter) - totalFor(totals, a, currentFilter);
-  });
+  var sorted = programs.slice().sort(function(a,b){ return totalFor(totals,b,currentFilter)-totalFor(totals,a,currentFilter); });
   var maxPts = Math.max(1, totalFor(totals, sorted[0], currentFilter));
-
-  var tabLabel = currentFilter === 'all' ? 'All Events'
-    : currentFilter === 'intramural' ? 'Intramural'
-    : currentFilter === 'student' ? 'Student Life' : 'Athletic';
-
+  var tabLabel = currentFilter==='all'?'All Events':currentFilter==='intramural'?'Intramural':currentFilter==='student'?'Student Life':'Athletic';
   document.getElementById('subtitleEl').textContent = tabLabel + '  ·  2026–2027 Season';
+
+  renderPodium(sorted, totals);
 
   var html = '<table><tbody>';
   for (var i = 0; i < sorted.length; i++) {
@@ -176,14 +217,14 @@ function renderTable() {
     var pts   = totalFor(totals, prog, currentFilter);
     var pct   = Math.round((pts / maxPts) * 100);
     var t     = totals[prog];
-    var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : String(i + 1);
+    var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':String(i+1);
     var color = COLORS[programs.indexOf(prog) % COLORS.length];
     html += '<tr>'
       + '<td class="rank">' + medal + '</td>'
       + '<td class="name">' + prog + '</td>'
-      + '<td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:' + pct + '%;background:' + color + ';"></div></div></td>'
+      + '<td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%;background:'+color+';"></div></div></td>'
       + '<td class="pts">' + pts.toLocaleString() + '</td>'
-      + '<td class="breakdown">I:' + t.intramural + ' S:' + t.student + ' A:' + t.athletic + '</td>'
+      + '<td class="breakdown">I:'+t.intramural+' S:'+t.student+' A:'+t.athletic+'</td>'
       + '</tr>';
   }
   html += '</tbody></table>';
@@ -192,9 +233,28 @@ function renderTable() {
 
 function setFilter(filter, btn) {
   currentFilter = filter;
-  document.querySelectorAll('.ftab').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.ftab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   renderTable();
+}
+
+function applyBranding(b) {
+  b = Object.assign({}, BRANDING_DEFAULTS, b || {});
+  document.documentElement.style.setProperty('--gold', b.gold);
+  document.documentElement.style.setProperty('--crimson', b.crimson);
+  // stripe
+  document.querySelector('.stripe').style.background = b.crimson;
+  // logo
+  var lm = document.getElementById('logoMark');
+  if (b.logoIsImage && b.logo) {
+    lm.innerHTML = '<img src="'+b.logo+'" />';
+  } else {
+    lm.textContent = b.logo || '🐯';
+  }
+  // text
+  document.getElementById('schoolEl').textContent = b.school || BRANDING_DEFAULTS.school;
+  document.getElementById('titleEl').innerHTML = (b.title || 'Tiger Pride') + ' <span>Standings</span>';
+  document.getElementById('footerTitle').textContent = 'Go ' + (b.title || 'Tigers') + '!';
 }
 
 function toggleTheme() {
@@ -204,6 +264,14 @@ function toggleTheme() {
 
 async function loadData() {
   try {
+    // Load branding first
+    try {
+      var br = await fetch(API + '?action=getBranding&_token=' + SECRET);
+      var bj = await br.json();
+      if (bj.ok && bj.branding) applyBranding(bj.branding);
+    } catch(_) {}
+
+    // Load standings
     var res  = await fetch(API + '?action=getAll&_token=' + SECRET);
     var json = await res.json();
     allData  = json.data || [];
@@ -211,16 +279,11 @@ async function loadData() {
       programs = (typeof json.programs[0] === 'object' && json.programs[0].name)
         ? json.programs.map(function(p){ return p.name; })
         : json.programs;
-    } else {
-      programs = [];
-    }
+    } else { programs = []; }
 
-    var now = new Date().toLocaleDateString('en-US', {
-      timeZone: 'America/Denver',
-      weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+    document.getElementById('dateEl').textContent = new Date().toLocaleDateString('en-US', {
+      timeZone: 'America/Denver', weekday:'long', month:'long', day:'numeric', year:'numeric'
     });
-    document.getElementById('dateEl').textContent = now;
-
     renderTable();
   } catch(e) {
     document.getElementById('tableWrap').innerHTML = '<div class="loading" style="color:#e84545;">Could not load standings. Check connection.</div>';
